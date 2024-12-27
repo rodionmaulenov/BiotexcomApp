@@ -1,0 +1,67 @@
+@use '@angular/material' as mat;
+
+.custom-container {
+  height: 100vh;
+  width: 100vw;
+  background: transparent;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.custom-sidenav {
+  margin-top: 50px;
+  width: 300px;
+  height: calc(100vh - 50px);
+  padding: 20px;
+  background-color: var(--dark-color);
+  border: 1.2px solid var(--light-color);
+  border-radius: 0 10px 10px 0;
+
+  @include mat.expansion-overrides((
+    container-background-color: #090808,
+    header-collapsed-state-height: 35px,
+    header-expanded-state-height: 35px,
+    header-indicator-color: #090808,
+    header-focus-state-layer-color: #090808,
+    header-hover-state-layer-color: #232f3e,
+    header-text-line-height: 24px,
+    header-text-size: 17px,
+    header-text-font: "JetBrains Mono Bold",
+    header-text-color: #FFFFFF,
+  ));
+}
+
+mat-drawer-content {
+  padding: 50px 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+
+.menu-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  color: var(--light-color);
+
+  mat-icon {
+    margin-right: 8px;
+  }
+
+  @include mat.button-overrides((
+    state-layer-color: #FFFFFF,
+    label-text-color: #FFFFFF,
+    label-text-font: 'JetBrains Mono SemiBold',
+    label-text-size: 14px,
+  ));
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+

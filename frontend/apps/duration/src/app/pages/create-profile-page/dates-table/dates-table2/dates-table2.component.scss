@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+
+.width{
+  border: white solid 1px;
+  width: 820px;
+    @include mat.table-overrides((
+    row-item-container-height: 100px, // Adjust row height here
+  ));
+}
+
+

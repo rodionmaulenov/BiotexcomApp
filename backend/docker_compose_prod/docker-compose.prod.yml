@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    image: ghcr.io/rodionmaulenov/django-application/web-prod:v1.0.0
+    command: gunicorn -w 3 main_app.wsgi --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - migrations_data:/usr/src/app/duration/migrations
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SERVICE=web
+
+  celery:
+    restart: on-failure
+    image: ghcr.io/rodionmaulenov/django-application/celery-prod:v1.0.0
+    command: /usr/src/app/deploy_sh/wait-for-web.sh celery -A main_app worker --loglevel=info
+    depends_on:
+      - web
+    env_file:
+      - .env
+
+  celery-beat:
+    restart: on-failure
+    image: ghcr.io/rodionmaulenov/django-application/celery-beat-prod:v1.0.0
+    command: /usr/src/app/deploy_sh/wait-for-web.sh celery -A main_app beat --loglevel=info
+    depends_on:
+      - web
+    env_file:
+      - .env
+
+  nginx:
+    image: ghcr.io/rodionmaulenov/django-application/nginx-prod:v1.0.0
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    volumes:
+      - ./persistentdata/certbot/conf:/etc/letsencrypt
+      - ./persistentdata/certbot/www:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
+    volumes:
+      - ./persistentdata/certbot/conf:/etc/letsencrypt
+      - ./persistentdata/certbot/www:/var/www/certbot
+
+
+volumes:
+  postgres_data:
+  migrations_data:
