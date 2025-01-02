@@ -1,11 +1,11 @@
-<div class="date-table">
-  <app-dates-change-table [dates]="relatedDates"
-                          (ChildFormStatus)="childFormStatusChange($event)"
+<div class="date-table" @tableFadeIn>
+  <app-dates-change-table [formInputData]="relatedDates"
+                          [(childFormStatus)]="childFormStatus"
                           (childFormDataPush)="onChildFormDataChange($event)">
   </app-dates-change-table>
 </div>
 
-<form class="tt_form profile-form" *ngIf="form" [formGroup]="form">
+<form class="tt_form profile-form" *ngIf="form" [formGroup]="form" @tableFadeIn>
 
   <div class="tt_form_label profile_label">
     <span class="tt_form_label-text">ФИО</span>
@@ -44,7 +44,7 @@
         Назад
       </button>
       <button mat-fab extended
-              [disabled]="form.invalid || childFormInvalid"
+              [disabled]="form.invalid || childFormStatus"
               type="submit"
               (click)="onSubmit()">
         Сохранить

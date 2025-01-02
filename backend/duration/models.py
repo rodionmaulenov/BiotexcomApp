@@ -57,6 +57,7 @@ class Date(models.Model):
     country = models.CharField(max_length=3, choices=COUNTRY_CHOICES)
     disable = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    no_track = models.BooleanField(default=False)
 
     class Meta:
         indexes = [

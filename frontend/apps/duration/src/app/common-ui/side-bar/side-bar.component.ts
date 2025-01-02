@@ -1,4 +1,6 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, inject, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, inject, ViewChild
+} from '@angular/core';
 import {MatDrawer, MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -10,6 +12,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {SidebarStateService} from './state.service';
+import {PaginatorSignalService} from '../paginator/signal.service';
 
 
 @Component({
@@ -33,15 +36,15 @@ import {SidebarStateService} from './state.service';
             <button mat-button class="menu-button" (click)="navigateTo('notInProgram')">Выбыли из программы</button>
             <button mat-button class="menu-button" (click)="createProfile()">
               <div class="icon-text">
-                <span>Добавить запись</span>
                 <mat-icon>person_add</mat-icon>
+                <span class="text">Добавить запись</span>
               </div>
             </button>
           </mat-expansion-panel>
         </mat-accordion>
       </mat-drawer>
 
-      <mat-drawer-content>
+      <mat-drawer-content [style.overflow]="isHidden()">
         <router-outlet></router-outlet>
       </mat-drawer-content>
 
@@ -53,6 +56,8 @@ import {SidebarStateService} from './state.service';
 export class SideBarComponent implements AfterViewInit {
   private readonly router: Router = inject(Router)
   private readonly sidebarState = inject(SidebarStateService)
+  private readonly paginator = inject(PaginatorSignalService)
+
 
   @ViewChild('drawer') drawer!: MatDrawer
   @ViewChild('expansionPanel') expansionPanel!: MatExpansionPanel
@@ -76,6 +81,10 @@ export class SideBarComponent implements AfterViewInit {
     this.drawer.close()
     this.expansionPanel.close()
     this.router.navigate(['/create-profile'])
+  }
+
+  isHidden(): string {
+    return this.paginator.pageSize() ? 'auto' : 'hidden'
   }
 }
 

@@ -1,211 +1,280 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges
+  AfterViewInit, ChangeDetectionStrategy, Component, effect, EventEmitter, inject, input, model,
+  OnDestroy, Output, ViewChild
 } from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
-  DateCountryListComponent
-} from '../../create-profile-page/dates-table/date-ui/date-country-list/date-country-list.component';
-import {DatePickerComponent} from '../../../common-ui/date-picker/date-picker.component';
-import {MatCheckbox} from '@angular/material/checkbox';
-import {MatButton} from '@angular/material/button';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {NgForOf, NgIf} from '@angular/common';
-import {AbstractControl, FormArray, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {fadeOut, staggeredFadeIn} from '../../../data/animations/delete-animations';
+  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter
+} from '@angular/material/core';
 import {FetchDate} from '../data/represent_data/profile.represent';
 import {DateFormService} from './data/services/load-date-form.service';
 import {DateEmptyControlService} from './data/services/empty-dates-form.service';
 import {SubmitData} from './data/interfaces/submit-data.interface';
 import {Subject, takeUntil} from 'rxjs';
+import {MatTable, MatTableModule} from '@angular/material/table';
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
+import {MatIconModule} from '@angular/material/icon';
+import {CUSTOM_DATE_FORMATS, CustomDateAdapter} from '../../../data/rus_datepicker/rus-datepicker';
+import {DateChangeTrackingService} from './date-change-tracking.service';
+import {FormArrayUtilityService} from './form-array-utility.service';
+import {PaginatorComponent} from '../paginator/paginator.component';
+import {russianPaginatorIntl} from '../paginator/paginator-rus.service';
 
+
+export type TableFields = {
+  entry: string;
+  exit: string;
+  country: string,
+  disable: boolean,
+  daysLeft: number,
+  delete: boolean
+}
 
 @Component({
   selector: 'app-dates-change-table',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    DateCountryListComponent, DatePickerComponent, MatCheckbox, MatSlideToggle, NgForOf, NgIf,
-    ReactiveFormsModule, MatButton
+  imports: [MatTableModule, MatPaginatorModule, MatInput, FormsModule, MatFormFieldModule, MatInputModule,
+    MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatSlideToggleModule, ReactiveFormsModule,
+    MatButtonModule, MatIconModule, PaginatorComponent
   ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './dates-change-table.component.html',
+  providers: [
+    provideNativeDateAdapter(),
+    {provide: MatPaginatorIntl, useValue: russianPaginatorIntl()},
+    {provide: DateAdapter, useClass: CustomDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS},
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'}
+  ],
+  template: `
+    <div class="wrapper">
+      <table mat-table [dataSource]="paginator.paginatedData()">
+
+        <!-- Entry Column -->
+        <ng-container matColumnDef="entry">
+          <th mat-header-cell *matHeaderCellDef>Въезд</th>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <ng-container [formGroup]="asFormGroup(row)">
+              <mat-form-field class="custom_text">
+                <input matInput
+                       [matDatepicker]="picker"
+                       formControlName="entry"
+                       placeholder="Выберите дату"
+                >
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Exit Column -->
+        <ng-container matColumnDef="exit">
+          <th mat-header-cell *matHeaderCellDef>Выезд</th>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <ng-container [formGroup]="asFormGroup(row)">
+              <mat-form-field class="custom_text">
+                <input matInput
+                       [matDatepicker]="picker1"
+                       formControlName="exit"
+                       placeholder="Выберите дату"
+                >
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Country Column -->
+        <ng-container matColumnDef="country">
+          <th mat-header-cell *matHeaderCellDef>Страна</th>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <ng-container [formGroup]="asFormGroup(row)">
+              <mat-form-field>
+                <mat-select formControlName="country" placeholder="Выберите страну" class="custom_text">
+                  <mat-option value="Украина">Украина</mat-option>
+                  <mat-option value="Молдова">Молдова</mat-option>
+                  <mat-option value="Узбекистан">Узбекистан</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Disable Column -->
+        <ng-container matColumnDef="disable">
+          <th mat-header-cell *matHeaderCellDef>Отслеживать</th>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <ng-container [formGroup]="asFormGroup(row)">
+              <mat-slide-toggle formControlName="disable"></mat-slide-toggle>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Days Left Column -->
+        <ng-container matColumnDef="days_left">
+          <th mat-header-cell *matHeaderCellDef>Дней прошло</th>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <ng-container [formGroup]="asFormGroup(row)">
+              <p class="custom_text">{{ row.get('days_left')?.value || '_' }}</p>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Delete Column -->
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef>Удалить</th>
+          <td mat-cell *matCellDef="let row; let i = index">
+            <ng-container [formGroup]="asFormGroup(row)">
+              <button mat-icon-button (click)="deleteRow(row.get('id')?.value)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            [formGroup]="asFormGroup(row)"
+            [class.deleted]="row.get('deleted')?.value"
+            [class.no-track]="row.get('no_track')?.value">
+        </tr>
+      </table>
+    </div>
+
+    <div class="paginator-button">
+      <div class="left-group">
+        <button mat-flat-button
+                (click)="addRow()"
+                [disabled]="formArray.invalid">
+          Добавить
+        </button>
+
+        <button mat-flat-button
+                (click)="onExtendClick()"
+                [disabled]="formArray.invalid
+                 || !FormUtils.isLastRowValid(formArray)
+                 || isExtendButtonDisabled">
+          Продлить
+        </button>
+      </div>
+      <app-paginator #paginator></app-paginator>
+    </div>
+  `,
   styleUrl: './dates-change-table.component.scss',
-  animations: [fadeOut, staggeredFadeIn]
 })
-export class DatesChangeTableComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() dates: FetchDate[] = []
-  @Output() ChildFormStatus = new EventEmitter<boolean>()
+export class DatesChangeTableComponent implements AfterViewInit, OnDestroy {
+  private readonly FilledFormServ = inject(DateFormService)
+  private readonly EmptyFormServ = inject(DateEmptyControlService)
+  private readonly FormFieldsServ = inject(DateChangeTrackingService)
+  protected readonly FormUtils = inject(FormArrayUtilityService)
+  protected readonly displayedColumns: string[] = ['entry', 'exit', 'country', 'disable', 'days_left', 'delete']
+  protected formArray = new FormArray<FormGroup>([])
+  private destroy$ = new Subject<void>()
+  protected isExtendButtonDisabled: boolean = false
+
+  @ViewChild(MatTable) table!: MatTable<TableFields>
+  @ViewChild('paginator') paginator!: PaginatorComponent
+
+  childFormStatus = model<boolean>()
+  formInputData = input<FetchDate[] | null>([])
   @Output() childFormDataPush = new EventEmitter<SubmitData[]>()
-  formArray!: FormArray<FormGroup>
-  destroy$ = new Subject<void>()
-  countryAliases: { [key: string]: string } = {
-    'Украина': 'UKR',
-    'Молдова': 'MLD',
-    'Узбекистан': 'UZB'
-  }
-
-  constructor(private dfs: DateFormService,
-              private dcs: DateEmptyControlService,
-              private cdr: ChangeDetectorRef) {
-  }
 
 
-  ngOnInit(): void {
-    // Initialize the formArray even if dates are not immediately available
-    this.formArray = new FormArray<FormGroup>([])
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dates'] && changes['dates'].currentValue) {
-      this.formArray = this.dfs.createDateFormArray(changes['dates'].currentValue)
-
-      this.ChildFormStatus.emit(this.formArray.invalid)
-      this.formArray.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        this.ChildFormStatus.emit(this.formArray.invalid)
-      });
-
-      this.cdr.detectChanges()
+  private readonly fillDataEffect = effect(() => {
+    const validDates = this.formInputData() || []
+    if (validDates.length == 0) {
+      this.formArray.push(this.EmptyFormServ.initEmptyDateForm(0))
     }
+    this.formArray = this.FilledFormServ.createFormArrayFromDates(validDates)
+    this.paginator.formArray.set(this.formArray)
+    this.paginator.table.set(this.table)
+    this.paginator.gotoLastPage()
+    this.childFormStatus.set(this.formArray.invalid)
 
+    this.formArray.controls.forEach((control) => {
+      this.FormFieldsServ.trackDateChanges(control as FormGroup, this.destroy$)
+    })
+  })
+
+
+  ngAfterViewInit(): void {
+    this.paginator.matPaginator.page
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.paginator.updatePaginatedData()
+      })
+
+    this.formArray.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.childFormStatus.set(this.formArray.invalid)
+      })
   }
 
-  addRow() {
-    const newRow = this.dcs.toFormGroup()
-    const entryControl = newRow.get('entry')
-    const exitControl = newRow.get('entry')
-    if (entryControl) {
-      entryControl.valueChanges
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.updateDaysLeft(newRow))
-    }
-    if (exitControl) {
-      exitControl.valueChanges
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.updateDaysLeft(newRow))
-    }
 
+  protected addRow() {
+    const uniqueId = this.FormUtils.getControlWithLargestId(this.formArray) + 1
+    // Create a new FormGroup for the row
+    const newRow = this.EmptyFormServ.initEmptyDateForm(uniqueId)
+    // Add the new row to the FormArray
     this.formArray.push(newRow)
+    this.FormFieldsServ.trackDateChanges(newRow, this.destroy$)
+    // Update pagination after adding a row
+    this.paginator.gotoLastPage()
 
-    this.ChildFormStatus.emit(this.formArray.invalid)
+    this.isExtendButtonDisabled = false
+
+    return newRow
   }
 
 
-  deleteRow(index: number, isChecked: boolean) {
-    if (isChecked) {
-      const row = this.formArray.at(index) as FormGroup
-      if (row.get('status')?.value === 'old') {
-        row.patchValue({deleted: true})
-        row.disable()
-        setTimeout(() => {
-          this.cdr.detectChanges()
-        }, 600)
-      }
+  protected deleteRow(rowId: string): void {
+    const rowIndex = this.formArray.controls.findIndex(
+      (control) => control.get('id')?.value === rowId)
+
+    if (rowIndex === -1) return
+
+    const row = this.formArray.at(rowIndex) as FormGroup
+    row.patchValue({deleted: true})
+    row.disable()
+
+    setTimeout(() => {
       if (row.get('status')?.value === 'new') {
-        row.patchValue({deleted: true})
-        row.disable()
-        setTimeout(() => {
-          this.formArray.removeAt(index)
-          this.cdr.detectChanges()
-        }, 600)
+        this.formArray.removeAt(rowIndex)
       }
-      this.ChildFormStatus.emit(this.formArray.invalid)
-    }
+      this.paginator.updatePaginatedData()
+      this.childFormStatus.set(this.formArray.invalid)
+    }, 400)
   }
 
 
-  asFormGroup(row: AbstractControl): FormGroup {
-    return row as FormGroup
-  }
-
-  trackByIndex(index: number): number {
-    return index
-  }
-
-  emitFormData(): void {
-    const formData = this.processFormData()
+  public emitFormData(): void {
+    const formData = this.FormUtils.processFormData(this.formArray)
     this.childFormDataPush.emit(formData || [])
   }
 
-  // processFormData(): SubmitData[] {
-  //   return this.formArray.controls.map((control) => {
-  //     const {country, exit, entry, ...usefulData} = control.value
-  //
-  //     usefulData.country = this.countryAliases[country]
-  //
-  //     const toUtcDateString = (date: string | Date | null): string | null => {
-  //       if (!date) return null
-  //       const parsedDate = new Date(date)
-  //       if (isNaN(parsedDate.getTime())) {
-  //         return null
-  //       }
-  //       return new Date(Date.UTC(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()))
-  //         .toISOString()
-  //         .split('T')[0]
-  //     }
-  //     usefulData.entry = toUtcDateString(entry)
-  //     usefulData.exit = toUtcDateString(exit)
-  //
-  //     return usefulData as SubmitData
-  //   });
-  // }
 
-  processFormData(): SubmitData[] {
-    return this.formArray.controls.map((control) => {
-      const formValue = control.value
-
-      const countryAlias = this.countryAliases[formValue.country ?? ''] ?? formValue.country
-
-      const toUtcDateString = (date: string | null): string | null => {
-        if (!date) return null;
-        const parsedDate = new Date(date)
-        if (isNaN(parsedDate.getTime())) {
-          return null
-        }
-        return new Date(Date.UTC(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()))
-          .toISOString()
-          .split('T')[0]
-      }
-
-      return {
-        ...formValue,
-        country: countryAlias,
-        entry: toUtcDateString(formValue.entry),
-        exit: toUtcDateString(formValue.exit),
-      } as SubmitData
-    });
+  protected asFormGroup(row: AbstractControl): FormGroup {
+    return row as FormGroup
   }
 
+  protected onExtendClick(): void {
+    this.FormUtils.updateOldAndNEwRowsNoTrack(this.formArray)
 
-  private updateDaysLeft(row: FormGroup): void {
-    const entry = row.get('entry')?.value
-    const exit = row.get('exit')?.value
-
-    if (entry && exit) {
-      const entryDate = new Date(entry)
-      const exitDate = new Date(exit)
-
-      if (!isNaN(entryDate.getTime()) && !isNaN(exitDate.getTime())) {
-        // Calculate the difference in whole days
-        const differenceInDays =
-          (exitDate.getTime() - entryDate.getTime()) / (1000 * 3600 * 24)
-
-        // Add 1 day to include both entry and exit dates if needed
-        const accurateDifference = Math.round(differenceInDays) + 1
-
-        // Update the days_left field
-        row.get('days_left')?.setValue(accurateDifference)
-      } else {
-        // Reset days_left if dates are invalid
-        row.get('days_left')?.setValue('_')
-      }
-    } else {
-      // Reset days_left if either date is missing
-      row.get('days_left')?.setValue('_')
-    }
+    this.isExtendButtonDisabled = true
   }
-
 
   ngOnDestroy() {
+    this.fillDataEffect.destroy()
     this.destroy$.next()
     this.destroy$.complete()
   }

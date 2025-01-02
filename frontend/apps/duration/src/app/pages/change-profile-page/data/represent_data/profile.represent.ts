@@ -6,6 +6,7 @@ export class FetchDate {
   disable: boolean
   created: string
   days_left: number
+  no_track: boolean
 
   constructor(data: any) {
     this.id = data.id
@@ -15,6 +16,7 @@ export class FetchDate {
     this.disable = data.disable
     this.created = data.created
     this.days_left = data.days_left
+    this.no_track = data.no_track
   }
 }
 

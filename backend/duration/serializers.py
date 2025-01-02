@@ -219,7 +219,7 @@ class FetchDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Date
         fields = [
-            'id', 'entry', 'exit', 'country', 'disable', 'created', 'days_left'
+            'id', 'entry', 'exit', 'country', 'disable', 'created', 'days_left', 'no_track'
         ]
 
     @staticmethod
@@ -252,7 +252,7 @@ class UpdateDateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Date
-        fields = ['id', 'entry', 'exit', 'country', 'disable', 'created', 'status', 'deleted', 'updated', ]
+        fields = ['id', 'entry', 'exit', 'country', 'disable', 'created', 'status', 'deleted', 'updated', 'no_track']
 
     def create(self, validated_data):
         # Remove fields that are not part of the Date model
@@ -296,7 +296,6 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # Process the 'file' field
         file_data = validated_data.get('file')
-
         if file_data and isinstance(file_data, ContentFile):
             # If the file is in Base64 format and converted to ContentFile, save it
             instance.file.save(file_data.name, file_data, save=False)

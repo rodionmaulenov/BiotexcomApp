@@ -1,8 +1,15 @@
-.mat-mdc-paginator {
-  background-color: transparent;
-  font-size: 13px;
-  font-family: 'JetBrains Mono SemiBold', 'sans-serif';
-  color: var(--light-color);
+@use '@angular/material' as mat;
+
+
+:host {
+  @include mat.paginator-overrides((
+    container-text-color: #FFFFF,
+    container-background-color: transparent,
+    container-text-font: 'JetBrains Mono SemiBold',
+    container-text-size: 13px,
+  ));
 }
+
+
 
 

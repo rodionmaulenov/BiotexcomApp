@@ -1,61 +1,178 @@
-.table {
-  padding: 16px 20px 0 16px;
-  background: var(--dark-color);
-  border: 1px solid var(--light-color);
+@use '@angular/material' as mat;
 
-  &.disabled {
-    cursor: not-allowed;
-    pointer-events: none;
+:host {
+  width: 820px;
+
+  // major change this is change bottom && top padding in all Angular material Input fields
+  ::ng-deep .mdc-text-field--no-label .mat-mdc-form-field-infix {
+    padding-top: var(--mat-form-field-container-vertical-padding, 16px);
+    padding-bottom: var(--mat-form-field-container-vertical-padding, 5px);
+  }
+
+  ::ng-deep .mat-mdc-form-field-icon-suffix {
+    align-self: self-end;
+  }
+
+  // major change this is change for left && right padding in all Angular material Input field
+  ::ng-deep .mdc-text-field {
+    padding: 0;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    width: 93%;
+  }
+
+  @include mat.table-overrides((
+    header-headline-color: rgba(255, 255, 255, 0.75),
+    header-container-height: 55px,
+    header-headline-line-height: 2,
+    header-headline-size: 12px,
+    row-item-label-text-weight: 500,
+    row-item-label-text-font: "JetBrains Mono",
+    row-item-outline-width: 1px,
+    row-item-outline-color: rgba(255, 255, 255, 0.2),
+    row-item-container-height: 72px,
+    background-color: #090808,
+  ));
+
+  @include mat.form-field-overrides((
+    state-layer-color: transparent,
+    filled-active-indicator-height: 1px,
+    filled-focus-active-indicator-height: 1px,
+    filled-container-color: transparent,
+    container-height: 40px,
+    filled-caret-color: #FFFFFF,
+    filled-input-text-color: #FFFFFF,
+  ));
+
+  @include mat.select-overrides((
+    enabled-trigger-text-color: #FFFF,
+    placeholder-text-color: rgba(255, 255, 255, 0.4),
+  ));
+
+  @include mat.paginator-overrides((
+    container-text-color: #FFFFFF,
+    container-background-color: transparent,
+  ));
+  @include mat.button-overrides((
+    filled-container-color: #5f00c0,
+    //filled-container-color: #810081,
+    filled-label-text-color: #FFFFFF,
+  ));
+}
+
+.wrapper {
+  padding: 0 20px 2px 20px;
+  border: white solid 1px;
+  background-color: var(--dark-color);
+}
+
+// column width
+th.mat-mdc-header-cell.mdc-data-table__header-cell.cdk-header-cell.cdk-column-name.mat-column-name {
+  width: 190px;
+}
+
+// text color
+.mat-mdc-row {
+  color: var(--light-color);
+}
+
+//// margin between columns
+.mdc-data-table__cell:not(:last-child),
+.mdc-data-table__header-cell:not(:last-child) {
+  padding-right: 50px;
+}
+
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 0;
+}
+
+.mat-mdc-form-field {
+  width: 180px;
+}
+
+input.mat-mdc-form-field-input-control::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.custom_text {
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  font-family: "JetBrains Mono", 'sans-serif';
+  color: var(--light-color);
+}
+
+/* Smooth FadeOut Animation */
+@keyframes fadeOutSmooth {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(0.99);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.97);
+  }
+  75% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+  90% {
+    opacity: 0.2;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.94);
+    height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
 }
 
-.table-container {
-  width: 100%;
+/* Apply Animation to Rows */
+tr[mat-row].deleted {
+  animation: fadeOutSmooth 400ms ease-in-out forwards;
+  pointer-events: none;
 }
 
-.table-header,
-.table_body {
-  display: grid;
-  grid-template-columns: 190px 190px 180px 1fr 1fr 1fr;
-  align-items: center;
-  column-gap: 50px;
-  margin-bottom: 20px;
-}
-
-.row-divider-top {
-  border-top: 1px solid var(--light-color); /* Adjust the color as needed */
-  margin: 10px 0; /* Adds spacing around the divider */
-  opacity: 0.2;
-}
-
-.row-divider {
-  border-bottom: 1px solid var(--light-color); /* Adjust the color as needed */
-  margin: 10px 0; /* Adds spacing around the divider */
-  opacity: 0.2;
-}
-
-.date_table_header {
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 16px;
-  font-family: "JetBrains Mono", 'sans-serif';
-  color: var(--light-transparent-color);
-}
-
-
-.button_div {
-  margin-top: 8px;
+.paginator-button {
+  margin-top: 5px;
   display: flex;
-  gap: 10px;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: space-between;
 }
 
-.mat-mdc-unelevated-button:not(:disabled) {
-    color: var(--light-color);
-    background-color: #5f00c0;
+.left-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
+.no-track {
+  opacity: 0.9;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

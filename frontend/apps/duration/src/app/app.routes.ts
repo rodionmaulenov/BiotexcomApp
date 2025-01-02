@@ -1,5 +1,4 @@
 import {Routes} from '@angular/router';
-import {LoginPageComponent} from './pages/login-page/login-page.component';
 import {LayoutComponent} from './common-ui/layout/layout.component';
 import {canActivateAuth} from './auth/auth.guard';
 import {DelayCountriesPageComponent} from './pages/delay-countries-page/delay-countries-page.component';
@@ -16,6 +15,4 @@ export const routes: Routes = [
     ],
     canActivate: [canActivateAuth],
   },
-
-  {path: 'login', component: LoginPageComponent},
 ];

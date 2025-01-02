@@ -8,30 +8,28 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatToolbar} from "@angular/material/toolbar";
 import {SidebarStateService} from '../side-bar/state.service';
-import {DatesTable2Component} from '../../pages/create-profile-page/dates-table/dates-table2/dates-table2.component';
 
-// MatProgressBar, NgIf, SideBarComponent, MatButton, MatIcon, MatToolbar,
+
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [ DatesTable2Component],
+  imports: [ MatProgressBar, NgIf, SideBarComponent, MatButton, MatIcon, MatToolbar,],
   template: `
-<!--    &lt;!&ndash; 🛠️ Progress Bar: Visible during navigation & initial load &ndash;&gt;-->
-<!--    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>-->
+    <!-- 🛠️ Progress Bar: Visible during navigation & initial load -->
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
-<!--    &lt;!&ndash; 🛠️ Toolbar &ndash;&gt;-->
-<!--    <mat-toolbar>-->
-<!--      <button mat-button (click)="toggleOpenCloseMenu()">-->
-<!--        <div class="icon-text">-->
-<!--          <mat-icon>{{ sidebarState.drawer()?.opened ? 'close' : 'menu' }}</mat-icon>-->
-<!--          <span>Меню</span>-->
-<!--        </div>-->
-<!--      </button>-->
-<!--    </mat-toolbar>-->
+    <!-- 🛠️ Toolbar -->
+    <mat-toolbar>
+      <button mat-button (click)="toggleOpenCloseMenu()">
+        <div class="icon-text">
+          <mat-icon>{{ sidebarState.drawer()?.opened ? 'close' : 'menu' }}</mat-icon>
+          <span class="text">Меню</span>
+        </div>
+      </button>
+    </mat-toolbar>
 
-<!--    &lt;!&ndash; 🛠️ Sidebar &ndash;&gt;-->
-<!--    <app-side-bar></app-side-bar>-->
-<app-dates-table2></app-dates-table2>
+    <!-- 🛠️ Sidebar -->
+    <app-side-bar></app-side-bar>
   `,
   styleUrl: './layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,7 +5,6 @@
   width: 100vw;
   background: transparent;
   overflow: hidden;
-  box-sizing: border-box;
 }
 
 .custom-sidenav {
@@ -37,7 +36,6 @@ mat-drawer-content {
   width: 100vw;
 }
 
-
 .menu-button {
   width: 100%;
   display: flex;
@@ -51,10 +49,7 @@ mat-drawer-content {
   }
 
   @include mat.button-overrides((
-    state-layer-color: #FFFFFF,
-    label-text-color: #FFFFFF,
-    label-text-font: 'JetBrains Mono SemiBold',
-    label-text-size: 14px,
+    filled-state-layer-color: #FFFFFF,
   ));
 }
 
@@ -62,6 +57,12 @@ mat-drawer-content {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.text {
+  color: #FFFFFF;
+  font-family: 'JetBrains Mono Bold', 'sans-serif';
+  font-size: 14px;
 }
 
 

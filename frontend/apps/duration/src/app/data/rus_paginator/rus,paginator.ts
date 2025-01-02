@@ -1,7 +1,7 @@
 import { MatPaginatorIntl } from '@angular/material/paginator';
 
 export function getRussianPaginatorIntl() {
-  const paginatorIntl = new MatPaginatorIntl();
+  const paginatorIntl = new MatPaginatorIntl()
 
   paginatorIntl.itemsPerPageLabel = 'Элементов на странице:'
   paginatorIntl.nextPageLabel = 'Следующая страница'
@@ -18,3 +18,5 @@ export function getRussianPaginatorIntl() {
 
   return paginatorIntl
 }
+
+

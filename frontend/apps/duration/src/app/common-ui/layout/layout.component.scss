@@ -23,10 +23,7 @@ mat-toolbar {
   background: transparent;
 
   @include mat.button-overrides((
-    state-layer-color: #FFFFFF,
-    label-text-color: #FFFFFF,
-    label-text-font: 'JetBrains Mono Bold',
-    label-text-size: 21px,
+    filled-state-layer-color: #FFFFFF,
   ));
 }
 
@@ -42,5 +39,11 @@ mat-toolbar button mat-icon {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.text {
+  font-size: 21px;
+  font-family: 'JetBrains Mono Bold', 'sans-serif';
+  color: var(--light-color);
 }
 

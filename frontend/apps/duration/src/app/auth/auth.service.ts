@@ -4,7 +4,7 @@ import {catchError, Subject, takeUntil, tap, throwError} from 'rxjs';
 import {TokenResponse} from './auth.interface';
 import {CookieService} from 'ngx-cookie-service';
 import {Router} from '@angular/router';
-import { environment } from '../../environments/environment';
+import {environment} from '../../environments/environment';
 
 
 @Injectable({providedIn: 'root'})
@@ -25,18 +25,6 @@ export class AuthService implements OnDestroy {
     return !!this.token
   }
 
-  login(payload: { username: string, password: string }) {
-    const formData = new FormData()
-
-    formData.append('username', payload.username)
-    formData.append('password', payload.password)
-
-    return this.http.post<TokenResponse>(`${this.baseApiUrl}token/`, formData)
-      .pipe(
-        tap((val: TokenResponse) => this.saveTokens(val)),
-        takeUntil(this.destroy$)
-      )
-  }
 
   refreshAuthToken() {
     return this.http.post<TokenResponse>(`${this.baseApiUrl}token/refresh/`, {
@@ -44,8 +32,18 @@ export class AuthService implements OnDestroy {
     }).pipe(
       tap(response => {
         this.token = response.access
-        this.cookieService.set('token', this.token)
-        if (this.refresh) this.cookieService.set('refresh', this.refresh)
+        this.cookieService.set('token', this.token, {
+          secure: environment.production,
+          sameSite: environment.production ? 'None' : 'Lax',
+          path: '/',
+        })
+        if (this.refresh) {
+          this.cookieService.set('refresh', this.refresh, {
+            secure: environment.production,
+            sameSite: environment.production ? 'None' : 'Lax',
+            path: '/',
+          })
+        }
       }),
       catchError(err => {
         this.logout()
@@ -59,15 +57,10 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-    this.router.navigate(['/login'])
-  }
+    window.location.href = environment.production
+      ? `${this.baseApiUrl}/login`
+      : 'http://localhost:4200/'
 
-  saveTokens(res: TokenResponse) {
-    this.token = res.access
-    this.refresh = res.refresh
-
-    this.cookieService.set('token', this.token)
-    this.cookieService.set('refresh', this.refresh)
   }
 
   ngOnDestroy() {

@@ -45,8 +45,9 @@ def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, 
     dates = list(Date.objects.filter(
         surrogacy_id=instance.pk,
         entry__lte=incremented_passed_date,
-        exit__gte=(incremented_passed_date - timedelta(days=179)),
-        country=country
+        exit__gte=(incremented_passed_date - timedelta(days=181)),
+        country=country,
+        no_track=False
     ).only('entry', 'exit'))
 
     # Get the latest exit date from the date records
@@ -58,7 +59,7 @@ def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, 
 
     while True:
         # while True:
-        beginning_180_days = incremented_passed_date - timedelta(days=179)
+        beginning_180_days = incremented_passed_date - timedelta(days=181)
 
         # Filter dates for the current 180-day window
         filtered_dates = [
@@ -100,17 +101,18 @@ def get_days_remain_and_left(the_last_date: datetime, pre_fetched_dates: list[Da
     incremented_passed_date = initial_last_date.replace()
 
     while True:
-        beginning_180_days = incremented_passed_date - timedelta(days=179)
+        beginning_180_days = incremented_passed_date - timedelta(days=181)
 
         filtered_dates = [
             idate for idate in pre_fetched_dates
-            if idate.entry <= incremented_passed_date and idate.exit >= beginning_180_days
+            if idate.entry <= incremented_passed_date and idate.exit >= beginning_180_days and not idate.no_track
         ]
 
         # Initialize total days stayed
         total_days_stayed = 0
         days_left = 0
         last_exit_date = None
+        total_difference = 0
         # Step 1: Calculate total days stayed from the filtered queryset
         for i, idate in enumerate(filtered_dates):
             if filtered_dates:
@@ -131,13 +133,14 @@ def get_days_remain_and_left(the_last_date: datetime, pre_fetched_dates: list[Da
 
         difference = (max(1, (emit_exit - emit_entry).days + 1))
         total_days_stayed += difference
+        total_difference += difference
 
         if total_days_stayed <= 90:
             incremented_passed_date += timedelta(days=1)
         if total_days_stayed > 90:
             incremented_passed_date = incremented_passed_date - timedelta(days=1)
             days_left = max(1, (incremented_passed_date - last_exit_date).days + 1)
-            total_days_stayed -= days_left
+            total_days_stayed -= total_difference
             return days_left, total_days_stayed
 
 

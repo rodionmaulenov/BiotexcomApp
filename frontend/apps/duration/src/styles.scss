@@ -50,13 +50,13 @@ body {
   color: var(--light-color);
   background: var(--dark-color);
   font-size: 10px;
-  background-image: url("../public/assets/images/background1.jpg");
+  background-image: url("../public/assets/images/123.jpg");
   width: 100vw;
   height: 100vh;
   background-attachment: fixed;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center bottom;
+  background-position: center;
   overflow: hidden;
 }
 
@@ -165,11 +165,8 @@ body {
 }
 
 
-html, body {
-  height: 100%;
-}
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+
+
+
+

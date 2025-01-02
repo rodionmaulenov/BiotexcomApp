@@ -27,7 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3mg-u^sri!$p(k$ekzvqn_ns12f5mu!q(_59z@b2645_*(p-)g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == 'True'
+# DEBUG = os.environ.get('DEBUG') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',') if os.environ.get('ALLOWED_HOSTS') \
     else ['0.0.0.0', '127.0.0.1', 'localhost']
@@ -60,6 +61,13 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "https://biotexcomapplication.docktor-di.com",
     ]
+    CSRF_TRUSTED_ORIGINS = [
+        "https://biotexcomapplication.docktor-di.com",
+    ]
+    CSRF_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SECURE = True
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
