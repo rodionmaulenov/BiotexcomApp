@@ -23,10 +23,10 @@ frontend/**/dist/
 frontend/**/tmp/
 frontend/**/out-tsc/
 frontend/**/bazel-out/
-frontend/**/.angular/cache/
+frontend/**/.angular
 
 # Ignore Node.js dependencies and logs
-frontend/**/node_modules/
+frontend/**/node_modules
 frontend/**/npm-debug.log
 frontend/**/yarn-error.log
 
@@ -43,11 +43,11 @@ frontend/**/yarn-error.log
 **/*.launch
 frontend/**/.history/
 
-# Allow specific VSCode settings files
-!frontend/**/.vscode/settings.json
-!frontend/**/.vscode/tasks.json
-!frontend/**/.vscode/launch.json
-!frontend/**/.vscode/extensions.json
+# Ignore VSCode settings files
+frontend/**/.vscode/settings.json
+frontend/**/.vscode/tasks.json
+frontend/**/.vscode/launch.json
+frontend/**/.vscode/extensions.json
 
 # Ignore miscellaneous files
 frontend/**/connect.lock
@@ -60,6 +60,3 @@ frontend/**/typings/
 .git/
 .github/
 
-# Ignore system files
-.DS_Store
-Thumbs.db
