@@ -1,56 +1,50 @@
 <div class="date-table" @tableFadeIn>
   <app-dates-change-table [formInputData]="relatedDates"
                           [(childFormStatus)]="childFormStatus"
+                          [(lengthNotZero)]="lengthNotZero"
                           (childFormDataPush)="onChildFormDataChange($event)">
   </app-dates-change-table>
 </div>
 
-<form class="tt_form profile-form" *ngIf="form" [formGroup]="form" @tableFadeIn>
+<form class="profile-form" *ngIf="form" [formGroup]="form" @tableFadeIn>
 
-  <div class="tt_form_label profile_label">
+  <div class="tt_form_label">
     <span class="tt_form_label-text">ФИО</span>
-    <input type="text"
-           formControlName="full_name"
-           class="tt_form_input"
-           placeholder="Введите имя"/>
+    <mat-form-field class="custom_text">
+      <input matInput placeholder="Введите имя" formControlName="full_name">
+    </mat-form-field>
   </div>
 
-  <div class="tt_form_label profile_label">
+  <div class="tt_form_label">
     <span class="tt_form_label-text">Страна</span>
-    <app-country-list
-      [notInProgram]="true"
-      formControlName="country"></app-country-list>
+    <mat-form-field>
+      <mat-select formControlName="country" placeholder="Выберите страну" class="custom_text">
+        <mat-option value="UKR">Украина</mat-option>
+        <mat-option value="MLD">Молдова</mat-option>
+        <mat-option value="UZB">Узбекистан</mat-option>
+        <mat-option value="NIP">Не в программе</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
 
-  <label class="tt_form_label profile_avatar">
+  <label class="tt_form_label">
     <span class="tt_form_label-text">Аватар</span>
     <app-avatar-upload (moveAvatarToParent)="parentFillAvatarField($event)"
                        [avatarUrl]="fileUrl()">
     </app-avatar-upload>
   </label>
 
-  <div class="profile_country__btn">
-    <div class="profile_country__btn__inner">
+  <div class="profile__btn">
       <button mat-fab extended
-              type="submit"
-              (click)="returnBack()"
-              class="back-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill icon"
-             viewBox="0 0 16 16">
-          <path
-            d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-        </svg>
+              (click)="returnBack()">
+        <mat-icon>arrow_back</mat-icon>
         Назад
       </button>
       <button mat-fab extended
-              [disabled]="form.invalid || childFormStatus"
-              type="submit"
+              [disabled]="form.invalid || childFormStatus || lengthNotZero"
               (click)="onSubmit()">
         Сохранить
       </button>
-
     </div>
-  </div>
-
 </form>

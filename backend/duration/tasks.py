@@ -13,12 +13,13 @@ def get_latest_non_disabled_date_for_tracking():
     with transaction.atomic():
         latest_entry_subquery = Date.objects.filter(
             surrogacy_id=OuterRef('surrogacy_id'),
-            disable=True
+            disable=True,
         ).order_by('-exit').values('exit')[:1]
 
         latest_dates = Date.objects.filter(
             exit=Subquery(latest_entry_subquery),
-            disable=True
+            disable=True,
+            country__in=['UKR', 'MLD', 'UZB']
         )
         return latest_dates
 

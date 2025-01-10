@@ -1,12 +1,14 @@
 import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, signal, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
+import {MatIcon} from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-avatar-upload',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    MatIcon
   ],
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss'
@@ -50,5 +52,10 @@ export class AvatarUploadComponent implements OnChanges {
     if (this.fileInput) {
       this.fileInput.nativeElement.value = ''
     }
+  }
+
+  stopClick(event: MouseEvent): void {
+    event.stopPropagation()
+    event.preventDefault()
   }
 }

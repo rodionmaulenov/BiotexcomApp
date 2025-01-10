@@ -1,6 +1,15 @@
 import {
-  AfterViewInit, ChangeDetectionStrategy, Component, effect, EventEmitter, inject, input, model,
-  OnDestroy, Output, ViewChild
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  input,
+  model,
+  OnChanges,
+  OnDestroy,
+  Output, signal,
+  SimpleChanges,
+  viewChild,
 } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -53,7 +62,7 @@ export type TableFields = {
   ],
   template: `
     <div class="wrapper">
-      <table mat-table [dataSource]="paginator.paginatedData()">
+      <table #table mat-table [dataSource]="childPaginator().paginatedData()">
 
         <!-- Entry Column -->
         <ng-container matColumnDef="entry">
@@ -98,9 +107,9 @@ export type TableFields = {
             <ng-container [formGroup]="asFormGroup(row)">
               <mat-form-field>
                 <mat-select formControlName="country" placeholder="Выберите страну" class="custom_text">
-                  <mat-option value="Украина">Украина</mat-option>
-                  <mat-option value="Молдова">Молдова</mat-option>
-                  <mat-option value="Узбекистан">Узбекистан</mat-option>
+                  <mat-option value="UKR">Украина</mat-option>
+                  <mat-option value="MLD">Молдова</mat-option>
+                  <mat-option value="UZB">Узбекистан</mat-option>
                 </mat-select>
               </mat-form-field>
             </ng-container>
@@ -161,8 +170,8 @@ export type TableFields = {
         <button mat-flat-button
                 (click)="onExtendClick()"
                 [disabled]="formArray.invalid
-                 || !FormUtils.isLastRowValid(formArray)
-                 || isExtendButtonDisabled">
+                || restrictUpdating()
+                || isExtendButtonDisabled">
           Продлить
         </button>
       </div>
@@ -171,7 +180,7 @@ export type TableFields = {
   `,
   styleUrl: './dates-change-table.component.scss',
 })
-export class DatesChangeTableComponent implements AfterViewInit, OnDestroy {
+export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   private readonly FilledFormServ = inject(DateFormService)
   private readonly EmptyFormServ = inject(DateEmptyControlService)
   private readonly FormFieldsServ = inject(DateChangeTrackingService)
@@ -180,58 +189,62 @@ export class DatesChangeTableComponent implements AfterViewInit, OnDestroy {
   protected formArray = new FormArray<FormGroup>([])
   private destroy$ = new Subject<void>()
   protected isExtendButtonDisabled: boolean = false
-
-  @ViewChild(MatTable) table!: MatTable<TableFields>
-  @ViewChild('paginator') paginator!: PaginatorComponent
+  protected restrictUpdating = signal<boolean>(true)
 
   childFormStatus = model<boolean>()
-  formInputData = input<FetchDate[] | null>([])
+  lengthNotZero = model<boolean>()
+  formInputData = input<FetchDate[] | []>([])
   @Output() childFormDataPush = new EventEmitter<SubmitData[]>()
+  childPaginator = viewChild.required(PaginatorComponent)
+  table = viewChild<MatTable<TableFields>>('table')
 
 
-  private readonly fillDataEffect = effect(() => {
-    const validDates = this.formInputData() || []
-    if (validDates.length == 0) {
-      this.formArray.push(this.EmptyFormServ.initEmptyDateForm(0))
+  ngOnChanges({formInputData}: SimpleChanges) {
+    if (formInputData && !formInputData.firstChange) {
+      const {currentValue} = formInputData
+
+      if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
+        this.addRow()
+      } else {
+        this.formArray = this.FilledFormServ.createFormArrayFromDates(currentValue)
+      }
+
+      const paginator = this.childPaginator()
+      const table = this.table()
+      if (paginator && table) {
+        paginator.formArray.set(this.formArray)
+        paginator.table.set(table)
+        paginator.gotoLastPage()
+      }
+
+      this.childFormStatus.set(this.formArray.invalid)
+
+      this.formArray.controls.forEach((control) => {
+        this.FormFieldsServ.trackDateChanges(control as FormGroup, this.destroy$, this.restrictUpdating)
+      })
+
+      this.formArray.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.childFormStatus.set(this.formArray.invalid)
+        })
     }
-    this.formArray = this.FilledFormServ.createFormArrayFromDates(validDates)
-    this.paginator.formArray.set(this.formArray)
-    this.paginator.table.set(this.table)
-    this.paginator.gotoLastPage()
-    this.childFormStatus.set(this.formArray.invalid)
-
-    this.formArray.controls.forEach((control) => {
-      this.FormFieldsServ.trackDateChanges(control as FormGroup, this.destroy$)
-    })
-  })
-
-
-  ngAfterViewInit(): void {
-    this.paginator.matPaginator.page
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.paginator.updatePaginatedData()
-      })
-
-    this.formArray.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.childFormStatus.set(this.formArray.invalid)
-      })
   }
 
 
   protected addRow() {
-    const uniqueId = this.FormUtils.getControlWithLargestId(this.formArray) + 1
+    const uniqueID = this.FormUtils.generateID()
     // Create a new FormGroup for the row
-    const newRow = this.EmptyFormServ.initEmptyDateForm(uniqueId)
+    const newRow = this.EmptyFormServ.initEmptyDateForm(uniqueID)
     // Add the new row to the FormArray
     this.formArray.push(newRow)
-    this.FormFieldsServ.trackDateChanges(newRow, this.destroy$)
+    this.FormFieldsServ.trackDateChanges(newRow, this.destroy$, this.restrictUpdating)
     // Update pagination after adding a row
-    this.paginator.gotoLastPage()
+    this.childPaginator().gotoLastPage()
 
     this.isExtendButtonDisabled = false
+    this.childFormStatus.set(this.formArray.invalid)
+    this.lengthNotZero.set(this.formArray.controls.length == 0)
 
     return newRow
   }
@@ -251,15 +264,18 @@ export class DatesChangeTableComponent implements AfterViewInit, OnDestroy {
       if (row.get('status')?.value === 'new') {
         this.formArray.removeAt(rowIndex)
       }
-      this.paginator.updatePaginatedData()
+      this.childPaginator().updatePaginatedData()
       this.childFormStatus.set(this.formArray.invalid)
+      this.lengthNotZero.set(this.formArray.controls
+        .filter(control => control.get('deleted')?.value !== true).length == 0
+      )
     }, 400)
   }
 
 
   public emitFormData(): void {
     const formData = this.FormUtils.processFormData(this.formArray)
-    this.childFormDataPush.emit(formData || [])
+    this.childFormDataPush.emit(formData)
   }
 
 
@@ -274,7 +290,6 @@ export class DatesChangeTableComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.fillDataEffect.destroy()
     this.destroy$.next()
     this.destroy$.complete()
   }

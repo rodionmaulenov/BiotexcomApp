@@ -40,7 +40,7 @@
     filled-active-indicator-height: 1px,
     filled-focus-active-indicator-height: 1px,
     filled-container-color: transparent,
-    container-height: 40px,
+    container-height: 45px,
     filled-caret-color: #FFFFFF,
     filled-input-text-color: #FFFFFF,
   ));
@@ -54,9 +54,9 @@
     container-text-color: #FFFFFF,
     container-background-color: transparent,
   ));
+
   @include mat.button-overrides((
     filled-container-color: #5f00c0,
-    //filled-container-color: #810081,
     filled-label-text-color: #FFFFFF,
   ));
 }
@@ -157,22 +157,3 @@ tr[mat-row].deleted {
 .no-track {
   opacity: 0.9;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

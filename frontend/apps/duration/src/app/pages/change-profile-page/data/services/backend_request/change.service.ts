@@ -4,7 +4,6 @@ import {FetchProfile} from '../../represent_data/profile.represent';
 import {environment} from '../../../../../../environments/environment';
 
 
-
 @Injectable({providedIn: 'root'})
 export class ChangeProfileService {
   private http: HttpClient = inject(HttpClient)

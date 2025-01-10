@@ -10,7 +10,7 @@ from django.db import models
 from rest_framework import serializers
 
 from duration.serializers_services.services import CreateSurrogacyMotherWithProfileName, CreateSurrogacyMother
-from duration.services import formatted_date, conv_db_to_readable_name, get_days_remain_and_left, get_country
+from duration.services import formatted_date, get_days_remain_and_left
 from duration.models import Date, SurrogacyMother
 
 Date: models
@@ -213,7 +213,6 @@ class CreateProfileSerializer(serializers.ModelSerializer):
 
 
 class FetchDateSerializer(serializers.ModelSerializer):
-    country = serializers.SerializerMethodField()
     days_left = serializers.SerializerMethodField()
 
     class Meta:
@@ -226,22 +225,14 @@ class FetchDateSerializer(serializers.ModelSerializer):
     def get_days_left(obj):
         return ((obj.exit - obj.entry) + timedelta(days=1)).days
 
-    @staticmethod
-    def get_country(obj):
-        return conv_db_to_readable_name(obj.country)
-
 
 class FetchSurrogacyMotherSerializer(serializers.ModelSerializer):
     related_dates = FetchDateSerializer(many=True)
-    country = serializers.SerializerMethodField()
+    # country = serializers.SerializerMethodField()
 
     class Meta:
         model = SurrogacyMother
         fields = ['id', 'full_name', 'country', 'file', 'related_dates']
-
-    @staticmethod
-    def get_country(obj):
-        return conv_db_to_readable_name(obj.country)
 
 
 class UpdateDateSerializer(serializers.ModelSerializer):
@@ -331,11 +322,22 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
                             updated_date = date_serializer.save()
                             created_or_updated_dates.append(updated_date)
 
+        # ✅ Find the latest date and assign its country to the mother instance
+        if created_or_updated_dates:
+            latest_date = max(
+                created_or_updated_dates,
+                key=lambda date: (date.exit, date.entry, date.created)
+            )
+            if latest_date and latest_date.country:
+                instance.country = latest_date.country
+                instance.save()
 
         # Update the SurrogacyMother profile itself
         updated = validated_data.pop('updated', False)
         if updated:
             for attr, value in validated_data.items():
+                if attr == 'country' and value != 'NIP':
+                    continue
                 setattr(instance, attr, value)
             instance.save()
 

@@ -1,18 +1,28 @@
-import {Injectable} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {Injectable, WritableSignal} from '@angular/core';
+import {FormArray, FormGroup} from '@angular/forms';
 import {Subject, takeUntil} from 'rxjs';
 
 
 @Injectable({providedIn: 'root'})
 export class DateChangeTrackingService {
-  /**
-   * Tracks changes on 'entry' and 'exit' form controls and updates 'days_left'.
-   * @param row - FormGroup representing a row.
-   * @param destroy$ - Subject to handle unsubscription when the component is destroyed.
-   */
-  public trackDateChanges(row: FormGroup, destroy$: Subject<void>): void {
+
+  public trackDateChanges(
+    row: FormGroup, destroy$: Subject<void>, restrictUpdating: WritableSignal<boolean>
+  ): void {
     const entryControl = row.get('entry')
     const exitControl = row.get('exit')
+    const status = row.get('status')?.value
+    const country = row.get('country')
+
+    if (status && status === 'new' && country) {
+      country.valueChanges
+        .pipe(takeUntil(destroy$))
+        .subscribe((value) => {
+          if (value === 'UKR') {
+            restrictUpdating.set(false)
+          }
+        })
+    }
 
     if (entryControl) {
       entryControl.valueChanges

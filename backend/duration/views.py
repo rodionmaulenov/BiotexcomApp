@@ -50,9 +50,9 @@ class SurrogacyListView(ListAPIView):
         country = self.request.GET.get('country', None)
         if len(country) > 3:
             country = get_country(country)
-        if country == 'UZB':
+        if country == 'uzbekistan':
             return get_uzb_queryset(queryset)
-        elif country == 'NIP':
+        elif country == 'notInProgram':
             return get_nip_queryset(queryset)
         else:
             return get_ukr_or_mld_queryset(queryset, country)
@@ -181,6 +181,10 @@ class ProfileUpdateView(APIView):
         data = request.data.copy()
         if 'country' in data:
             data['country'] = get_country(data['country'])
+            if data['datesTable']:
+                for item in data['datesTable']:
+                    if 'country' in item:
+                        item['country'] = get_country(item['country'])
 
         serializer = UpdateProfileSerializer(instance, data=data, partial=True)
         if serializer.is_valid():

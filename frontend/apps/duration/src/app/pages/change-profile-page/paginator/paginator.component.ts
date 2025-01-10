@@ -1,21 +1,22 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal, ViewChild, WritableSignal
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, signal, ViewChild, WritableSignal
 } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {FormArray, FormGroup} from '@angular/forms';
 import {MatTable} from '@angular/material/table';
 import {TableFields} from '../dates-change-table/dates-change-table.component';
+import {NgIf} from '@angular/common';
 
 
 @Component({
   selector: 'app-paginator',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatPaginator],
+  imports: [MatPaginator, NgIf],
   template: `
-    <div class="ctm-paginator">
+    <div class="ctm-paginator" *ngIf="formArray()">
       <mat-paginator [length]="length"
-                     [pageSizeOptions]="[3, 4, 5, 7]"
+                     [pageSizeOptions]="[3, 5, 7]"
                      [pageSize]="pageSize"
                      [pageIndex]="pageIndex"
                      (page)="onPageChange($event)"
@@ -36,7 +37,7 @@ export class PaginatorComponent {
 
   protected length = 0
   protected pageIndex = 0
-  protected pageSize = 3
+  protected pageSize = 5
 
 
   protected onPageChange(event: { pageIndex: number; pageSize: number }): void {

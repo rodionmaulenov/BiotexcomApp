@@ -5,6 +5,8 @@ from django.db.models import OuterRef, Subquery, Prefetch
 from django.db import models
 
 from duration.models import Date, SurrogacyMother
+
+
 Date: models
 SurrogacyMother: models
 
@@ -15,27 +17,14 @@ def formatted_date(value: datetime) -> str:
 
 
 def get_country(country: str) -> str:
-    country = country.capitalize()
-    if country == 'Moldova':
+    if country == 'moldova':
         return 'MLD'
-    elif country == 'Ukraine':
+    elif country == 'ukraine':
         return 'UKR'
-    elif country == 'Uzbekistan':
+    elif country == 'uzbekistan':
         return 'UZB'
     else:
         return 'NIP'
-
-
-def conv_db_to_readable_name(country: str) -> str:
-    country = country.strip()
-    if country == 'MLD':
-        return 'Молдова'
-    elif country == 'UKR':
-        return 'Украина'
-    elif country == 'UZB':
-        return 'Узбекистан'
-    else:
-        return 'Не в программе'
 
 
 def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, country: str) -> int | str:

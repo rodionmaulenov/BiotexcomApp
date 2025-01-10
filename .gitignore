@@ -1,58 +1,64 @@
-backend/media
-backend/static
+# Ignore media and static files
+backend/media/
+backend/static/
 .idea
-backend/benv
+venv
 backend/.env
 
-
-# Python bytecode and cache directories
-__pycache__/
-*.pyo
-*.pyd
+# Ignore Python cache and compiled files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
 .Python
 
 # Ignore all files in the migrations folder
 backend/duration/migrations/*
-
 # But keep the __init__.py file
 !/backend/duration/migrations/__init__.py
 
-# Ignore frontend build files
-/frontend/timestamp-calendar/dist
-/frontend/timestamp-calendar/tmp
-/frontend/timestamp-calendar/out-tsc
-/frontend/timestamp-calendar/bazel-out
 
-# Ignore Node dependencies
-/frontend/timestamp-calendar/node_modules
-/frontend/timestamp-calendar/npm-debug.log
-/frontend/timestamp-calendar/yarn-error.log
+# Ignore frontend build artifacts
+frontend/**/dist/
+frontend/**/tmp/
+frontend/**/out-tsc/
+frontend/**/bazel-out/
+frontend/**/.angular/cache/
 
-# Ignore IDE and editor configurations
-/frontend/timestamp-calendar/.idea/
-/frontend/timestamp-calendar/.project
-/frontend/timestamp-calendar/.classpath
-/frontend/timestamp-calendar/.c9/
-/frontend/timestamp-calendar/*.launch
-/frontend/timestamp-calendar/.settings/
-/frontend/timestamp-calendar/*.sublime-workspace
+# Ignore Node.js dependencies and logs
+frontend/**/node_modules/
+frontend/**/npm-debug.log
+frontend/**/yarn-error.log
 
-# Ignore VSCode files
-/frontend/timestamp-calendar/.vscode/*
-!/frontend/timestamp-calendar/.vscode/settings.json
-!/frontend/timestamp-calendar/.vscode/tasks.json
-!/frontend/timestamp-calendar/.vscode/launch.json
-!/frontend/timestamp-calendar/.vscode/extensions.json
-/frontend/timestamp-calendar/.history/*
+# Ignore system and editor-specific files
+**/.DS_Store
+**/Thumbs.db
+**/.idea/
+**/.vscode/
+**/*.sublime-workspace
+**/.project
+**/.classpath
+**/.settings/
+**/.c9/
+**/*.launch
+frontend/**/.history/
 
-# Ignore Miscellaneous files
-/frontend/timestamp-calendar/.angular/cache
-/frontend/timestamp-calendar/.sass-cache/
-/frontend/timestamp-calendar/connect.lock
-/frontend/timestamp-calendar/coverage
-/frontend/timestamp-calendar/libpeerconnection.log
-/frontend/timestamp-calendar/testem.log
-/frontend/timestamp-calendar/typings
+# Allow specific VSCode settings files
+!frontend/**/.vscode/settings.json
+!frontend/**/.vscode/tasks.json
+!frontend/**/.vscode/launch.json
+!frontend/**/.vscode/extensions.json
+
+# Ignore miscellaneous files
+frontend/**/connect.lock
+frontend/**/coverage/
+frontend/**/libpeerconnection.log
+frontend/**/testem.log
+frontend/**/typings/
+
+# Ignore Git-related files
+.git/
+.github/
 
 # Ignore system files
 .DS_Store
