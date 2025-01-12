@@ -62,7 +62,7 @@
 }
 
 .wrapper {
-  padding: 0 20px 2px 20px;
+  padding: 0 20px 10px 20px;
   border: white solid 1px;
   background-color: var(--dark-color);
 }
@@ -139,13 +139,6 @@ input.mat-mdc-form-field-input-control::placeholder {
 tr[mat-row].deleted {
   animation: fadeOutSmooth 400ms ease-in-out forwards;
   pointer-events: none;
-}
-
-.paginator-button {
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .left-group {

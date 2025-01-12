@@ -58,5 +58,4 @@ frontend/**/typings/
 
 # Ignore Git-related files
 .git/
-.github/
 

@@ -73,33 +73,18 @@ export interface ProfileName {
   full_name: string;
 }
 
+// Interface for individual ProfileNames
+export interface ProfileNameCountry {
+  full_name: string;
+  country: string;
+}
 
 // Interface for the response containing an array of profileNames
 export interface ProfileNameResults {
-  results: ProfileName[];
+  results: ProfileName[]
 }
 
-
-//
-// export interface DateEntrUpdate {
-//   entry: string
-//   exit: string;
-//   country: string;
-//   disable: boolean;
-//   files: (string | null)[];
-//   status: string;
-//   created: Date;
-//   deleted: boolean;
-//   updated: boolean;
-// }
-//
-// // Main profile interface
-// export interface ProfileUpdate {
-//   avatar: string | null;
-//   country: string | null;
-//   datesTable: DateEntrUpdate[];
-//   full_name: string | null;
-//   updated: boolean | null;
-// }
-
+export interface ProfileNameCountryResults {
+  results: ProfileNameCountry[]
+}
 

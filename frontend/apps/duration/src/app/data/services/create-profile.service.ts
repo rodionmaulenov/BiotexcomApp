@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ProfileNameResults} from '../interfaces/profile.interface';
+import {ProfileNameCountryResults, ProfileNameResults} from '../interfaces/profile.interface';
 import {CreateProfileINT} from '../../pages/create-profile-page/data/interfaces/create-page.interface';
 import {ChangeProfileINT} from '../../pages/change-profile-page/data/interfaces/submit.interface';
 import {environment} from '../../../environments/environment';
@@ -13,16 +13,16 @@ export class CreateProfileService {
   private http: HttpClient = inject(HttpClient)
     baseApiUrl: string = environment.apiUrl
 
-  getProfilesByName(searchQuery: string): Observable<ProfileNameResults> {
+  getProfilesByName(searchQuery: string): Observable<ProfileNameCountryResults> {
     const url = `${this.baseApiUrl}last_five_profiles/`
     let params = new HttpParams().set('search', searchQuery)
-    return this.http.get<ProfileNameResults>(url, {params})
+    return this.http.get<ProfileNameCountryResults>(url, {params})
   }
 
-  lastCreatedProfiles(count: number): Observable<ProfileNameResults> {
+  lastCreatedProfiles(count: number): Observable<ProfileNameCountryResults> {
     const url = `${this.baseApiUrl}last_five_profiles/`
     let params = new HttpParams().set('count_profile', count.toString())
-    return this.http.get<ProfileNameResults>(url, {params})
+    return this.http.get<ProfileNameCountryResults>(url, {params})
   }
 
   createProfile(profile: CreateProfileINT): any {

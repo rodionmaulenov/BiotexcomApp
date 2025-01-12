@@ -1,12 +1,11 @@
 <form>
-  <input type="text"
-         placeholder="Выберите профиль"
-         [formControl]="control"
-         [matAutocomplete]="auto"
-         class="tt_form_input">
+  <mat-form-field class="custom_text">
+    <input matInput placeholder="Выберите профиль"  [formControl]="control" [matAutocomplete]="auto">
+  </mat-form-field>
   <mat-autocomplete #auto="matAutocomplete">
-    @for (profileName of profileNames; track profileName) {
-      <mat-option [value]="profileName">{{ profileName }}</mat-option>
-    }
+    <mat-option *ngFor="let profileName of profileNames; trackBy: trackByProfileName"
+                [value]="profileName.full_name">
+      {{ profileName.full_name }}
+    </mat-option>
   </mat-autocomplete>
 </form>

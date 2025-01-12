@@ -23,8 +23,10 @@ def get_country(country: str) -> str:
         return 'UKR'
     elif country == 'uzbekistan':
         return 'UZB'
-    else:
+    elif country == 'notInProgram':
         return 'NIP'
+    else:
+        return country
 
 
 def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, country: str) -> int | str:

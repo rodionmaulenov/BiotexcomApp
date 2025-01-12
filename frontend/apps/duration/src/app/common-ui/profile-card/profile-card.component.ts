@@ -7,15 +7,16 @@ import {MatBadge} from '@angular/material/badge';
 
 
 @Component({
-    selector: 'app-profile-card',
-    standalone: true,
-    imports: [CalendarComponent, NgIf, MatBadge],
-    templateUrl: './profile-card.component.html',
-    styleUrl: './profile-card.component.scss'
+  selector: 'app-profile-card',
+  standalone: true,
+  imports: [CalendarComponent, NgIf, MatBadge],
+  templateUrl: './profile-card.component.html',
+  styleUrl: './profile-card.component.scss'
 })
 export class ProfileCardComponent {
-  private router = inject(Router)
-  private route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly route = inject(ActivatedRoute)
+  protected readonly defaultAvatar = "/assets/images/avatar.png"
 
   @Input() profile!: Profile
   @Input() daysLeft!: number | null
@@ -29,8 +30,8 @@ export class ProfileCardComponent {
   }
 
   isBadgeHidden(daysLeft: any): boolean {
-    if (typeof(daysLeft) === 'string') return true
-    return daysLeft > 17
+    if (typeof (daysLeft) === 'string') return true
+    return daysLeft > 20
   }
 
   onCalendarChange(date: string): void {

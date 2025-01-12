@@ -13,8 +13,9 @@ import {ProfileUzb} from '../../../data/interfaces/profile.interface';
     styleUrl: './uzb-profile-card.component.scss'
 })
 export class UzbProfileCardComponent {
-  private router = inject(Router)
-  private route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly route = inject(ActivatedRoute)
+  protected readonly defaultAvatar = "/assets/images/avatar.png"
 
   @Input() profile!: ProfileUzb
   @Input() ukrDaysLeft!: number | null

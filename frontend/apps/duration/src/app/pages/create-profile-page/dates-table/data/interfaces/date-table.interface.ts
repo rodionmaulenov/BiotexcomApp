@@ -1,8 +1,8 @@
 import {FormControl} from '@angular/forms';
 
 export interface DateEntryForm {
-  entry: FormControl<string | null>
-  exit: FormControl<string | null>
+  entry: FormControl<Date | null>
+  exit: FormControl<Date | null>
   country: FormControl<string | null>
   disable: FormControl<boolean>
   deleted: FormControl<boolean>
@@ -10,8 +10,8 @@ export interface DateEntryForm {
 }
 
 export interface SubmitDateForm {
-  entry: string
-  exit: string
+  entry: Date
+  exit: Date
   country: string
   disable: boolean
   created: string

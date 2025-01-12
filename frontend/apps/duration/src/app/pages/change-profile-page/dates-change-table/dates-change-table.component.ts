@@ -266,6 +266,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
       }
       this.childPaginator().updatePaginatedData()
       this.childFormStatus.set(this.formArray.invalid)
+      this.restrictUpdating.set(true)
       this.lengthNotZero.set(this.formArray.controls
         .filter(control => control.get('deleted')?.value !== true).length == 0
       )

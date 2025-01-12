@@ -1,22 +1,24 @@
-import {Component, Input} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import {notInProgramProfile} from '../../../data/interfaces/profile.interface';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgIf} from '@angular/common';
 
 
 @Component({
-    selector: 'app-not-in-program-profile-card',
-    standalone: true,
-    imports: [NgIf],
-    templateUrl: './not-in-program-profile-card.component.html',
-    styleUrl: './not-in-program-profile-card.component.scss'
+  selector: 'app-not-in-program-profile-card',
+  standalone: true,
+  imports: [NgIf],
+  templateUrl: './not-in-program-profile-card.component.html',
+  styleUrl: './not-in-program-profile-card.component.scss'
 })
 export class NotInProgramProfileCardComponent {
+  private readonly router = inject(Router)
+  private readonly route = inject(ActivatedRoute)
+  protected readonly defaultAvatar = "/assets/images/avatar.png"
+
   @Input() profile!: notInProgramProfile
   @Input() country!: null | string
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-  }
 
   onSubmit(profile_id: number): void {
     this.router.navigate(['/change-profile', profile_id.toString()], {

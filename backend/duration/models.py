@@ -31,7 +31,7 @@ class SurrogacyMother(models.Model):
         choices=COUNTRY_CHOICES,
         default='UZB',
     )
-    file = models.ImageField(upload_to=directory_path)
+    file = models.ImageField(upload_to=directory_path, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

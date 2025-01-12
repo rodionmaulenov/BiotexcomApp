@@ -153,7 +153,7 @@ class SurrogacyListSerializer(serializers.ModelSerializer):
 class LastFiveProfilesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurrogacyMother
-        fields = ["full_name"]
+        fields = ["full_name", 'country']
 
 
 class Base64AvatarImageField(serializers.ImageField):
@@ -197,7 +197,7 @@ class CreateDateSerializer(serializers.ModelSerializer):
 
 
 class CreateProfileSerializer(serializers.ModelSerializer):
-    avatar = Base64AvatarImageField(source='file')
+    avatar = Base64AvatarImageField(source='file', required=False, allow_null=True)
     profileName = serializers.CharField(max_length=50, required=False, allow_blank=True, allow_null=True)
     datesTable = CreateDateSerializer(many=True, required=False)
 
@@ -278,7 +278,7 @@ class UpdateDateSerializer(serializers.ModelSerializer):
 class UpdateProfileSerializer(serializers.ModelSerializer):
     datesTable = UpdateDateSerializer(many=True, required=False)
     updated = serializers.BooleanField(required=True, allow_null=True)
-    file = Base64AvatarImageField()
+    file = Base64AvatarImageField(required=False, allow_null=True)
 
     class Meta:
         model = SurrogacyMother

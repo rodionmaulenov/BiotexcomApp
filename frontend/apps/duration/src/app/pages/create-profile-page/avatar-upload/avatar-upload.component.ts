@@ -1,4 +1,14 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, signal, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  signal,
+  ViewChild
+} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 
@@ -6,6 +16,7 @@ import {MatIcon} from '@angular/material/icon';
 @Component({
   selector: 'app-avatar-upload',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     NgIf,
     MatIcon

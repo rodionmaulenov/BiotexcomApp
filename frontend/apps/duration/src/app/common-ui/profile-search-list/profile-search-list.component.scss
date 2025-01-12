@@ -1,0 +1,9 @@
+:host {
+  .mat-mdc-form-field {
+    width: 350px;
+  }
+}
+
+input.mat-mdc-form-field-input-control::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}

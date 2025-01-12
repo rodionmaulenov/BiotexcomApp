@@ -153,7 +153,7 @@ class LastFiveProfilesView(ListAPIView):
             surrogacy_mother = queryset.order_by('-created')[:int(count_profile)]
 
         if name is not None:
-            surrogacy_mother = queryset.filter(full_name__icontains=name)[:8]
+            surrogacy_mother = queryset.filter(full_name__icontains=name)[:5]
 
         serializer = self.get_serializer(surrogacy_mother, many=True)
         return Response({"results": serializer.data}, status=status.HTTP_200_OK)

@@ -136,7 +136,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
       .subscribe(profiles => {
         this.processProfiles(profiles)
         this.cdr.markForCheck()
-      });
+      })
   }
 
   processProfiles(profiles: (Profile | ProfileUzb | notInProgramProfile)[]) {
@@ -147,16 +147,6 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
     ) as Profile[]
   }
 
-
-  // getDaysLeft(profileId: number, type?: string): number {
-  //   if (type === 'UKR') {
-  //     return this.ukrDaysLeft[profileId]?.days_left
-  //   } else if (type === 'MLD') {
-  //     return this.mldDaysLeft[profileId]?.days_left
-  //   } else {
-  //     return this.daysLeftMap[profileId]?.days_left
-  //   }
-  // }
 
   getDaysLeft(profileId: number, type?: string): number {
     if (type === 'UKR') {

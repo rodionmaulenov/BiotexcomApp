@@ -1,7 +1,7 @@
 <div *ngIf="profile" class="profile_card">
   <!-- FIRST GRID COLUMN AVATAR-->
   <div class="avatar-name">
-    <img [src]="profile.file"
+    <img [src]="profile.file || defaultAvatar"
          alt="avatar"
          class="profile_card__img">
     <div class="profile_card__name">

@@ -1,80 +1,77 @@
+@use '@angular/material' as mat;
+
 :host {
-  margin-top: 20px;
-  margin-left: 10px;
+  width: 1721px;
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 200px;
   grid-template-columns: repeat(2, 1fr);
-  padding: 0 24px 24px 24px;
+  padding: 20px 24px 24px 34px;
+
+  ::ng-deep .mdc-text-field {
+    padding: 0 10px 0 5px;
+  }
+
+  ::ng-deep .mdc-text-field--no-label .mat-mdc-form-field-infix {
+    padding-top: var(--mat-form-field-container-vertical-padding, 16px);
+    padding-bottom: var(--mat-form-field-container-vertical-padding, 5px);
+  }
+
+  .mat-mdc-form-field {
+    width: 350px;
+  }
+
+  .mat-mdc-fab {
+    color: #ffffff;
+  }
+
+  .mat-mdc-extended-fab {
+    width: 150px;
+  }
+
+  @include mat.form-field-overrides((
+    state-layer-color: transparent,
+    filled-active-indicator-height: 1px,
+    filled-focus-active-indicator-height: 1px,
+    filled-container-color: transparent,
+    container-height: 40px,
+    filled-caret-color: #FFFFFF,
+    filled-input-text-color: #FFFFFF,
+  ));
+
+  @include mat.fab-overrides((
+    container-color: #5f00c0,
+  ));
 }
 
 .date-table {
+  width: 921px;
   grid-column: 1/2;
 }
 
 .profile-form {
   min-height: 820px;
-  justify-self: center;
   width: 600px;
-  grid-column: 2/3;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  justify-self: center;
+  grid-column: 2/3;
   grid-gap: 20px;
-}
-
-.profile_label {
-  position: relative;
-  grid-column: 1/2;
-  width: 350px;
-  max-height: 115px;
-}
-
-.profile_avatar {
-  margin-top: 10px;
-  position: relative;
-  grid-column: 1/-1;
-}
-
-.profile_country__list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  max-height: 200px;
-  overflow-y: auto;
+  padding: 16px 20px 5px 20px;
   background: var(--dark-color);
   border: 1px solid var(--light-color);
-  border-top: none;
-  z-index: 10;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.profile_country__item {
-  padding: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 21px;
-  font-family: "JetBrains Mono", 'sans-serif';
+.tt_form_label {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.profile_country__item:hover {
-  background-color: black;
-}
-
-.profile_country__btn {
-  grid-column: 1/-1;
+.profile__btn {
   margin-top: 200px;
-  align-self: center;
+  display: flex;
+  gap: 0.5rem;
 }
 
-.profile_country__btn__inner {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 10px;
+input.mat-mdc-form-field-input-control::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
 }
-
-.tt_form .mat-mdc-extended-fab {
-  width: 200px;
-}
-
