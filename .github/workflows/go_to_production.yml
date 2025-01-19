@@ -22,9 +22,14 @@ jobs:
 
       - name: Build Angular application
         run: |
-          cd ./frontend/timestamp-calendar
+          cd ./frontend/apps/login
           npm install
-          mkdir -p ../../backend/nginx/static/angular
+          mkdir -p ../../../backend/nginx/static/login
+          npm run build
+          
+          cd ../duration
+          npm install
+          mkdir -p ../../../backend/nginx/static/duration
           npm run build
 
       - name: Building docker images
