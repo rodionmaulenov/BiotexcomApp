@@ -57,12 +57,11 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-    const redirectUrl = environment.production
-      ? `${this.baseApiUrl}login`
-      : 'http://localhost:4200/';
 
-    console.log('Redirecting to:', redirectUrl); // Add this
-    window.location.href = redirectUrl;
+    window.location.href = environment.production
+      ? `${this.baseApiUrl.replace(/\/+$/, '')}/login`
+      : 'http://localhost:4200/'
+
   }
 
 

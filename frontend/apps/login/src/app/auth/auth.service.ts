@@ -25,23 +25,21 @@ export class AuthService implements OnDestroy {
       .subscribe((response: AuthTokenResponse) => {
         const isSecure = environment.production
         this.cookieService.set('token', response.access, {
-            secure: isSecure,
-            sameSite: isSecure ? 'None' : 'Lax',
-            path: '/'
-          })
+          secure: isSecure,
+          sameSite: isSecure ? 'None' : 'Lax',
+          path: '/'
+        })
         this.cookieService.set('refresh', response.refresh, {
-            secure: isSecure,
-            sameSite: isSecure ? 'None' : 'Lax',
-            path: '/'
-          })
+          secure: isSecure,
+          sameSite: isSecure ? 'None' : 'Lax',
+          path: '/'
+        })
 
 
         window.location.href = environment.production
-          ? `${this.baseApiUrl}`
+          ? `${this.baseApiUrl.replace(/\/+$/, '')}`
           : 'http://localhost:4201/'
-
-        console.log('Redirecting to:', window.location.href);
-      });
+      })
   }
 
 
