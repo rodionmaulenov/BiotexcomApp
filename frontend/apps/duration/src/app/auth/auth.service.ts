@@ -53,16 +53,31 @@ export class AuthService implements OnDestroy {
     )
   }
 
+  // logout() {
+  //   this.cookieService.deleteAll()
+  //   this.refresh = null
+  //   this.token = null
+  //   const redirectUrl = environment.production
+  //     ? `${this.baseApiUrl}login`
+  //     : 'http://localhost:4200/';
+  //
+  //   console.log('Redirecting to:', redirectUrl); // Add this
+  //   window.location.href = redirectUrl;
+  // }
+
   logout() {
-    this.cookieService.deleteAll()
-    this.refresh = null
-    this.token = null
+  this.cookieService.deleteAll();
+  this.refresh = null;
+  this.token = null;
+  console.log('AuthService.logout: Redirecting to', environment.production
+    ? `${this.baseApiUrl}login`
+    : 'http://localhost:4200/');
 
-    window.location.href = environment.production
-      ? `${this.baseApiUrl.replace(/\/+$/, '')}/login`
-      : 'http://localhost:4200/'
+  window.location.href = environment.production
+    ? `${this.baseApiUrl}login`
+    : 'http://localhost:4200/';
+}
 
-  }
 
 
   ngOnDestroy() {
