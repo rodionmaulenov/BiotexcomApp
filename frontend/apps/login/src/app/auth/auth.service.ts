@@ -39,6 +39,8 @@ export class AuthService implements OnDestroy {
         window.location.href = environment.production
           ? `${this.baseApiUrl}`
           : 'http://localhost:4201/'
+
+        console.log('Redirecting to:', window.location.href);
       });
   }
 
