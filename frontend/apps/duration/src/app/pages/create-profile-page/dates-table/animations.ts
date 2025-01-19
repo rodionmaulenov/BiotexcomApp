@@ -1,7 +1,7 @@
-import {trigger, transition, style, animate, keyframes} from '@angular/animations';
+import {animate, keyframes, style, transition, trigger} from '@angular/animations';
 
 export const fadeOut = trigger('fadeOut', [
-  transition('out => void', [
+  transition(':leave', [
     animate(
       '600ms ease-in-out',
       keyframes([
@@ -13,6 +13,3 @@ export const fadeOut = trigger('fadeOut', [
     ),
   ]),
 ]);
-
-
-

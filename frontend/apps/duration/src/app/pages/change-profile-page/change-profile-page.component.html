@@ -1,4 +1,4 @@
-<div class="date-table" @tableFadeIn>
+<div class="date-table">
   <app-dates-change-table [formInputData]="relatedDates"
                           [(childFormStatus)]="childFormStatus"
                           [(lengthNotZero)]="lengthNotZero"
@@ -6,16 +6,20 @@
   </app-dates-change-table>
 </div>
 
-<form class="profile-form" *ngIf="form" [formGroup]="form" @tableFadeIn>
+<form class="profile-form" *ngIf="form" [formGroup]="form">
 
   <div class="tt_form_label">
     <span class="tt_form_label-text">ФИО</span>
-    <mat-form-field class="custom_text">
-      <input matInput placeholder="Введите имя" formControlName="full_name">
-    </mat-form-field>
+      <input
+      appFocusInteraction
+      formControlName="full_name"
+      type="text"
+      placeholder="Введите имя"
+      class="custom_input"
+    />
   </div>
 
-  <div class="tt_form_label">
+  <div class="tt_form_label_select">
     <span class="tt_form_label-text">Страна</span>
     <mat-form-field>
       <mat-select formControlName="country" placeholder="Выберите страну" class="custom_text">

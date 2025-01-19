@@ -22,6 +22,10 @@
     width: 93%;
   }
 
+  ::ng-deep input.mat-mdc-form-field-input-control::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
   @include mat.table-overrides((
     header-headline-color: rgba(255, 255, 255, 0.75),
     header-container-height: 55px,
@@ -43,16 +47,12 @@
     container-height: 45px,
     filled-caret-color: #FFFFFF,
     filled-input-text-color: #FFFFFF,
+    filled-disabled-container-color: transparent,
   ));
 
   @include mat.select-overrides((
     enabled-trigger-text-color: #FFFF,
     placeholder-text-color: rgba(255, 255, 255, 0.4),
-  ));
-
-  @include mat.paginator-overrides((
-    container-text-color: #FFFFFF,
-    container-background-color: transparent,
   ));
 
   @include mat.button-overrides((
@@ -91,58 +91,41 @@ th.mat-mdc-header-cell.mdc-data-table__header-cell.cdk-header-cell.cdk-column-na
   width: 180px;
 }
 
-input.mat-mdc-form-field-input-control::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
-}
 
 .custom_text {
-  font-size: 15px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   font-family: "JetBrains Mono", 'sans-serif';
   color: var(--light-color);
 }
 
-/* Smooth FadeOut Animation */
-@keyframes fadeOutSmooth {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  25% {
-    opacity: 0.9;
-    transform: scale(0.99);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(0.97);
-  }
-  75% {
-    opacity: 0.4;
-    transform: scale(0.96);
-  }
-  90% {
-    opacity: 0.2;
-    transform: scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.94);
-    height: 0;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-}
-
-/* Apply Animation to Rows */
-tr[mat-row].deleted {
-  animation: fadeOutSmooth 400ms ease-in-out forwards;
-  pointer-events: none;
-}
-
 .add-button {
   margin-top: 10px;
+}
+
+.entry-date-picker-position {
+  position: relative;
+}
+
+.entry-date-picker {
+  position: absolute;
+  top: -11px;
+  left: 139px;
+}
+
+.exit-date-picker-position {
+  position: relative;
+}
+
+.exit-date-picker {
+  position: absolute;
+  top: -11px;
+  left: 139px;
+}
+
+.disabled{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
 }
 
 

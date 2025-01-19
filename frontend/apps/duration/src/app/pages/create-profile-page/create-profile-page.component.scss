@@ -3,40 +3,9 @@
 :host {
   width: 1721px;
   display: grid;
-  grid-gap: 200px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 150px;
+  grid-template-columns: 921px 600px;
   padding: 20px 24px 24px 34px;
-
-  ::ng-deep .mdc-text-field {
-    padding: 0 10px 0 5px;
-  }
-
-  ::ng-deep .mdc-text-field--no-label .mat-mdc-form-field-infix {
-    padding-top: var(--mat-form-field-container-vertical-padding, 16px);
-    padding-bottom: var(--mat-form-field-container-vertical-padding, 5px);
-  }
-
-  .mat-mdc-form-field {
-    width: 350px;
-  }
-
-  .mat-mdc-fab {
-    color: #ffffff;
-  }
-
-  .mat-mdc-extended-fab {
-    width: 150px;
-  }
-
-  @include mat.form-field-overrides((
-    state-layer-color: transparent,
-    filled-active-indicator-height: 1px,
-    filled-focus-active-indicator-height: 1px,
-    filled-container-color: transparent,
-    container-height: 40px,
-    filled-caret-color: #FFFFFF,
-    filled-input-text-color: #FFFFFF,
-  ));
 
   @include mat.fab-overrides((
     container-color: #5f00c0,
@@ -49,13 +18,13 @@
 }
 
 .profile-form {
-  min-height: 820px;
+  height: 820px;
   width: 600px;
   display: grid;
   justify-self: center;
   grid-column: 2/3;
   grid-gap: 20px;
-  padding: 16px 20px 5px 20px;
+  padding: 16px 20px 0 20px;
   background: var(--dark-color);
   border: 1px solid var(--light-color);
 }
@@ -70,6 +39,14 @@
   margin-top: 200px;
   display: flex;
   gap: 0.5rem;
+}
+
+.mat-mdc-fab {
+  color: #ffffff;
+}
+
+.mat-mdc-extended-fab {
+  width: 150px;
 }
 
 input.mat-mdc-form-field-input-control::placeholder {

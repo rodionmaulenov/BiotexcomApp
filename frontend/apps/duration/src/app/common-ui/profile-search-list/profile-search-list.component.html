@@ -1,7 +1,18 @@
 <form>
-  <mat-form-field class="custom_text">
-    <input matInput placeholder="Выберите профиль"  [formControl]="control" [matAutocomplete]="auto">
-  </mat-form-field>
+  <div class="icon_position">
+    <input
+      appFocusInteraction
+      [syncTarget]="icon"
+      [formControl]="control"
+      [matAutocomplete]="auto"
+      placeholder="Выберите профиль"
+      class="custom_input"
+      type="text"
+    />
+    <mat-icon #icon class="icon-arrow-drop-down">
+      arrow_drop_down
+    </mat-icon>
+  </div>
   <mat-autocomplete #auto="matAutocomplete">
     <mat-option *ngFor="let profileName of profileNames; trackBy: trackByProfileName"
                 [value]="profileName.full_name">

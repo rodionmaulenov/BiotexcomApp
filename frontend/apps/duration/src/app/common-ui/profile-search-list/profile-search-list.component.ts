@@ -12,15 +12,16 @@ import {debounceTime, distinctUntilChanged, map, Subject, switchMap, takeUntil} 
 import {CreateProfileService} from '../../data/services/create-profile.service';
 import {ProfileNameCountry, ProfileNameCountryResults} from '../../data/interfaces/profile.interface';
 import {NgForOf} from '@angular/common';
-import {MatFormField} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
+import {MatIcon} from '@angular/material/icon';
+import {FocusInteractionDirective} from '../directives/app-focus-interaction.directive';
 
 
 @Component({
   selector: 'app-profile-search-list',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, MatAutocompleteTrigger, MatAutocomplete, MatOption, NgForOf, MatFormField, MatInput],
+  imports: [ReactiveFormsModule, MatAutocompleteTrigger, MatAutocomplete, MatOption, NgForOf,
+    FocusInteractionDirective, MatIcon, FocusInteractionDirective],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -113,5 +114,4 @@ export class ProfileSearchListComponent implements OnInit, OnDestroy, ControlVal
     this.destroy$.next()
     this.destroy$.complete()
   }
-
 }

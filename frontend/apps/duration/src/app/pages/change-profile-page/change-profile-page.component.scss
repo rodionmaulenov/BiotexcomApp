@@ -1,13 +1,14 @@
 @use '@angular/material' as mat;
 
 :host {
+  width: 1700px;
   display: grid;
-  grid-template-columns: 1fr 600px;
-  grid-gap: 40px;
+  grid-template-columns: 1000px 600px;
+  grid-gap: 100px;
   padding: 20px 24px 24px 34px;
 
   ::ng-deep .mdc-text-field {
-    padding: 0 10px 0 5px;
+    padding: 0 10px 0 0;
   }
 
   ::ng-deep .mdc-text-field--no-label .mat-mdc-form-field-infix {
@@ -17,14 +18,11 @@
 
   .mat-mdc-form-field {
     width: 350px;
+    height: 65px;
   }
 
   .mat-mdc-fab {
     color: #ffffff;
-  }
-
-  .date-table {
-    grid-column: 1/2;
   }
 
   .mat-mdc-extended-fab {
@@ -36,7 +34,7 @@
     filled-active-indicator-height: 1px,
     filled-focus-active-indicator-height: 1px,
     filled-container-color: transparent,
-    container-height: 40px,
+    container-height: 45px,
     filled-caret-color: #FFFFFF,
     filled-input-text-color: #FFFFFF,
   ));
@@ -46,14 +44,19 @@
   ));
 }
 
+.date-table {
+  width: 1000px;
+  grid-column: 1/2;
+}
+
 .profile-form {
-  min-height: 820px;
+  height: 820px;
   width: 600px;
   display: grid;
   justify-self: center;
   grid-column: 2/3;
   grid-gap: 20px;
-  padding: 16px 20px;
+  padding: 16px 20px 0 20px;
   background: var(--dark-color);
   border: 1px solid var(--light-color);
 }
@@ -64,18 +67,24 @@
   gap: 20px;
 }
 
-.custom_text {
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  font-family: "JetBrains Mono", 'sans-serif';
-  color: var(--light-color);
+.tt_form_label_select {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .profile__btn {
   margin-top: 200px;
   display: flex;
   gap: 0.5rem;
+}
+
+.custom_text {
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  font-family: "JetBrains Mono", 'sans-serif';
+  color: var(--light-color);
 }
 
 input.mat-mdc-form-field-input-control::placeholder {

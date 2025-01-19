@@ -36,7 +36,7 @@ def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, 
     dates = list(Date.objects.filter(
         surrogacy_id=instance.pk,
         entry__lte=incremented_passed_date,
-        exit__gte=(incremented_passed_date - timedelta(days=181)),
+        exit__gte=(incremented_passed_date - timedelta(days=179)),
         country=country,
         no_track=False
     ).only('entry', 'exit'))
@@ -50,7 +50,7 @@ def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, 
 
     while True:
         # while True:
-        beginning_180_days = incremented_passed_date - timedelta(days=181)
+        beginning_180_days = incremented_passed_date - timedelta(days=179)
 
         # Filter dates for the current 180-day window
         filtered_dates = [
@@ -88,11 +88,11 @@ def get_days_on_control_date(instance: SurrogacyMother, control_date: datetime, 
 
 
 def get_days_remain_and_left(the_last_date: datetime, pre_fetched_dates: list[Date]) -> tuple[int, int]:
-    initial_last_date: datetime = the_last_date
+    initial_last_date: datetime = the_last_date + timedelta(days=1)
     incremented_passed_date = initial_last_date.replace()
 
     while True:
-        beginning_180_days = incremented_passed_date - timedelta(days=181)
+        beginning_180_days = incremented_passed_date - timedelta(days=179)
 
         filtered_dates = [
             idate for idate in pre_fetched_dates
@@ -102,7 +102,6 @@ def get_days_remain_and_left(the_last_date: datetime, pre_fetched_dates: list[Da
         # Initialize total days stayed
         total_days_stayed = 0
         days_left = 0
-        last_exit_date = None
         total_difference = 0
         # Step 1: Calculate total days stayed from the filtered queryset
         for i, idate in enumerate(filtered_dates):
@@ -110,16 +109,13 @@ def get_days_remain_and_left(the_last_date: datetime, pre_fetched_dates: list[Da
                 entry_date = max(idate.entry, beginning_180_days)
                 exit_date = idate.exit
 
-                if i == len(filtered_dates) - 1:
-                    last_exit_date = exit_date
-
                 if entry_date <= exit_date:
                     stay_duration = max(1, (exit_date - entry_date).days + 1)
                     total_days_stayed += stay_duration
                     if total_days_stayed >= 90:
                         return days_left, total_days_stayed
 
-        emit_entry = last_exit_date
+        emit_entry = initial_last_date
         emit_exit = incremented_passed_date
 
         difference = (max(1, (emit_exit - emit_entry).days + 1))
@@ -130,7 +126,7 @@ def get_days_remain_and_left(the_last_date: datetime, pre_fetched_dates: list[Da
             incremented_passed_date += timedelta(days=1)
         if total_days_stayed > 90:
             incremented_passed_date = incremented_passed_date - timedelta(days=1)
-            days_left = max(1, (incremented_passed_date - last_exit_date).days + 1)
+            days_left = max(1, (incremented_passed_date - emit_entry).days + 1)
             total_days_stayed -= total_difference
             return days_left, total_days_stayed
 

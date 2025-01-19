@@ -24,7 +24,7 @@ import {SubmitData} from './data/interfaces/submit-data.interface';
 import {Subject, takeUntil} from 'rxjs';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
-import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
@@ -34,6 +34,8 @@ import {DateChangeTrackingService} from './date-change-tracking.service';
 import {FormArrayUtilityService} from './form-array-utility.service';
 import {PaginatorComponent} from '../paginator/paginator.component';
 import {russianPaginatorIntl} from '../paginator/paginator-rus.service';
+import {fadeOut} from '../../../data/animations/delete-animations';
+import {DatePickerFieldDirective} from '../../../common-ui/directives/date-picker-field.directive';
 
 
 export type TableFields = {
@@ -49,9 +51,9 @@ export type TableFields = {
   selector: 'app-dates-change-table',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatPaginatorModule, MatInput, FormsModule, MatFormFieldModule, MatInputModule,
+  imports: [MatTableModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatInputModule,
     MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatSlideToggleModule, ReactiveFormsModule,
-    MatButtonModule, MatIconModule, PaginatorComponent
+    MatButtonModule, MatIconModule, PaginatorComponent, DatePickerFieldDirective
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -60,125 +62,9 @@ export type TableFields = {
     {provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS},
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'}
   ],
-  template: `
-    <div class="wrapper">
-      <table #table mat-table [dataSource]="childPaginator().paginatedData()">
-
-        <!-- Entry Column -->
-        <ng-container matColumnDef="entry">
-          <th mat-header-cell *matHeaderCellDef>Въезд</th>
-          <td mat-cell *matCellDef="let row; let i = index">
-            <ng-container [formGroup]="asFormGroup(row)">
-              <mat-form-field class="custom_text">
-                <input matInput
-                       [matDatepicker]="picker"
-                       formControlName="entry"
-                       placeholder="Выберите дату"
-                >
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Exit Column -->
-        <ng-container matColumnDef="exit">
-          <th mat-header-cell *matHeaderCellDef>Выезд</th>
-          <td mat-cell *matCellDef="let row; let i = index">
-            <ng-container [formGroup]="asFormGroup(row)">
-              <mat-form-field class="custom_text">
-                <input matInput
-                       [matDatepicker]="picker1"
-                       formControlName="exit"
-                       placeholder="Выберите дату"
-                >
-                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-              </mat-form-field>
-            </ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Country Column -->
-        <ng-container matColumnDef="country">
-          <th mat-header-cell *matHeaderCellDef>Страна</th>
-          <td mat-cell *matCellDef="let row; let i = index">
-            <ng-container [formGroup]="asFormGroup(row)">
-              <mat-form-field>
-                <mat-select formControlName="country" placeholder="Выберите страну" class="custom_text">
-                  <mat-option value="UKR">Украина</mat-option>
-                  <mat-option value="MLD">Молдова</mat-option>
-                  <mat-option value="UZB">Узбекистан</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Disable Column -->
-        <ng-container matColumnDef="disable">
-          <th mat-header-cell *matHeaderCellDef>Отслеживать</th>
-          <td mat-cell *matCellDef="let row; let i = index">
-            <ng-container [formGroup]="asFormGroup(row)">
-              <mat-slide-toggle formControlName="disable"></mat-slide-toggle>
-            </ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Days Left Column -->
-        <ng-container matColumnDef="days_left">
-          <th mat-header-cell *matHeaderCellDef>Дней прошло</th>
-          <td mat-cell *matCellDef="let row; let i = index">
-            <ng-container [formGroup]="asFormGroup(row)">
-              <p class="custom_text">{{ row.get('days_left')?.value || '_' }}</p>
-            </ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Delete Column -->
-        <ng-container matColumnDef="delete">
-          <th mat-header-cell *matHeaderCellDef>Удалить</th>
-          <td mat-cell *matCellDef="let row; let i = index">
-            <ng-container [formGroup]="asFormGroup(row)">
-              <button mat-icon-button (click)="deleteRow(row.get('id')?.value)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Table Rows -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: displayedColumns;"
-            [formGroup]="asFormGroup(row)"
-            [class.deleted]="row.get('deleted')?.value"
-            [class.no-track]="row.get('no_track')?.value">
-        </tr>
-      </table>
-    </div>
-
-    <div class="paginator-button">
-      <div class="left-group">
-        <button mat-flat-button
-                (click)="addRow()"
-                [disabled]="formArray.invalid">
-          Добавить
-        </button>
-
-        <button mat-flat-button
-                (click)="onExtendClick()"
-                [disabled]="formArray.invalid
-                || restrictUpdating()
-                || isExtendButtonDisabled">
-          Продлить
-        </button>
-      </div>
-      <app-paginator #paginator></app-paginator>
-    </div>
-  `,
+  templateUrl: './dates-change-table.component.html',
   styleUrl: './dates-change-table.component.scss',
+  animations: [fadeOut]
 })
 export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   private readonly FilledFormServ = inject(DateFormService)
@@ -189,6 +75,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   protected formArray = new FormArray<FormGroup>([])
   private destroy$ = new Subject<void>()
   protected isExtendButtonDisabled: boolean = false
+  protected deletedRows = new Set<string>()
   protected restrictUpdating = signal<boolean>(true)
 
   childFormStatus = model<boolean>()
@@ -255,10 +142,11 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
       (control) => control.get('id')?.value === rowId)
 
     if (rowIndex === -1) return
-
     const row = this.formArray.at(rowIndex) as FormGroup
     row.patchValue({deleted: true})
     row.disable()
+
+    this.deletedRows.add(rowId)
 
     setTimeout(() => {
       if (row.get('status')?.value === 'new') {
@@ -270,7 +158,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
       this.lengthNotZero.set(this.formArray.controls
         .filter(control => control.get('deleted')?.value !== true).length == 0
       )
-    }, 400)
+    }, 100)
   }
 
 

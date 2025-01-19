@@ -47,13 +47,13 @@ class UzbekistanSurrogacyListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_day_update_ukr(obj):
-        if not obj.latest_date_ukr:
+        if not hasattr(obj ,'latest_date_ukr'):
             return "_"
         return formatted_date(obj.latest_date_ukr)
 
     @staticmethod
     def get_day_update_mld(obj):
-        if not obj.latest_date_mld:
+        if not hasattr(obj, 'latest_date_mld'):
             return "_"
         return formatted_date(obj.latest_date_mld)
 

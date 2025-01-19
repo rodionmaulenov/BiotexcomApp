@@ -22,6 +22,7 @@ import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
+import {FocusInteractionDirective} from '../../common-ui/directives/app-focus-interaction.directive';
 
 
 const countries = {
@@ -44,19 +45,11 @@ const countries_for_dates = {
   standalone: true,
   imports: [
     AvatarUploadComponent, FormsModule, ReactiveFormsModule, NgIf, MatIconModule,
-    DatesChangeTableComponent, MatFabButton, MatFormField, MatOption, MatSelect, MatInputModule
+    DatesChangeTableComponent, MatFabButton, MatFormField, MatOption, MatSelect, MatInputModule, FocusInteractionDirective
   ],
   templateUrl: './change-profile-page.component.html',
   styleUrl: './change-profile-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('tableFadeIn', [
-      transition(':enter', [
-        style({opacity: 0, transform: 'translateY(0)'}),
-        animate('200ms ease-in-out', style({opacity: 1, transform: 'translateY(0)'}))
-      ])
-    ])
-  ]
 })
 export class ChangeProfilePageComponent implements OnInit, OnDestroy {
   private readonly location = inject(Location)
@@ -129,7 +122,8 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private getLatestDate(dates: SubmitData[]): SubmitData {
-    return dates.reduce((latest: SubmitData, current: SubmitData) => {
+    const filteredDates = dates.filter(date => !date.deleted)
+    return filteredDates.reduce((latest: SubmitData, current: SubmitData) => {
       const latestExit = new Date(latest.exit).getTime()
       const currentExit = new Date(current.exit).getTime()
       const latestEntry = new Date(latest.entry).getTime()

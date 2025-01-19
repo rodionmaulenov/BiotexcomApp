@@ -8,10 +8,12 @@ import {SubmitDateForm} from '../../dates-table/data/interfaces/date-table.inter
 import {CreateProfileINT} from '../interfaces/create-page.interface';
 import {DatesTableComponent} from '../../dates-table/dates-table.component';
 import {ProfileSearchListComponent} from '../../../../common-ui/profile-search-list/profile-search-list.component';
+import {ProfileService} from '../../../../data/services/profile.service';
 
 
 @Injectable({providedIn: 'root'})
 export class MainLogicService {
+  private readonly profileService = inject(ProfileService)
   private readonly router = inject(Router)
   private readonly createProfileService = inject(CreateProfileService)
   private readonly destroy$ = new Subject<void>()
@@ -34,6 +36,7 @@ export class MainLogicService {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
+          this.profileService.clearCache()
           form.reset()
           dateComponent.formArray.reset()
           if (!notProceed) {

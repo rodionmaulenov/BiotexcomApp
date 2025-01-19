@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, viewChild, ViewChild
+  ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, viewChild
 } from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Subject, takeUntil} from 'rxjs';
@@ -8,9 +8,8 @@ import {DatesTableComponent} from './dates-table/dates-table.component';
 import {MatFabButton} from '@angular/material/button';
 import {ProfileSearchListComponent} from '../../common-ui/profile-search-list/profile-search-list.component';
 import {MainLogicService} from './data/services/main-logic.service';
-import {MatFormField} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {animate, style, transition, trigger} from '@angular/animations';
+import {NgIf} from '@angular/common';
+import {FocusInteractionDirective} from '../../common-ui/directives/app-focus-interaction.directive';
 
 
 @Component({
@@ -18,19 +17,11 @@ import {animate, style, transition, trigger} from '@angular/animations';
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, AvatarUploadComponent, DatesTableComponent,
-    MatFabButton, ProfileSearchListComponent, MatFormField, MatInput
+    MatFabButton, ProfileSearchListComponent, NgIf, FocusInteractionDirective
   ],
   templateUrl: './create-profile-page.component.html',
   styleUrl: './create-profile-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('tableFadeIn', [
-      transition(':enter', [
-        style({opacity: 0, transform: 'translateY(0)'}),
-        animate('200ms ease-in-out', style({opacity: 1, transform: 'translateY(0)'}))
-      ])
-    ])
-  ]
 })
 export class CreateProfilePageComponent implements OnDestroy, OnInit {
   private readonly MainLogicServ = inject(MainLogicService)

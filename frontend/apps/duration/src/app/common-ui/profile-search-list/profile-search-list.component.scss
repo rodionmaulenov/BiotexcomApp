@@ -1,9 +1,8 @@
-:host {
-  .mat-mdc-form-field {
-    width: 350px;
-  }
+.icon_position {
+  position: relative;
 }
 
-input.mat-mdc-form-field-input-control::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
+.icon-arrow-drop-down {
+  position: absolute;
+  left: 325px
 }

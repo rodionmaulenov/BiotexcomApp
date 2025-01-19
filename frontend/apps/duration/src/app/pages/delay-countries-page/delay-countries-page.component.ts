@@ -92,9 +92,9 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
         if (countryFromQuery) {
           this.country = countryFromQuery
         } else {
-          console.warn('No country found in query params');
+          console.warn('No country found in query params')
         }
-      });
+      })
 
     this.searchForm.valueChanges
       .pipe(takeUntil(this.destroy$), debounceTime(300))
@@ -105,7 +105,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
           this.loadProfiles(this.pageIndex + 1, this.pageSize)
         }
         this.cdr.markForCheck()
-      });
+      })
   }
 
   loadProfilesFromQueryParams() {

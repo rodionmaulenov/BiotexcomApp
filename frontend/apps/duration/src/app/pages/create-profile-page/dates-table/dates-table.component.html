@@ -1,46 +1,104 @@
-<!--<div class="table">-->
-<!--  <div class="table-container">-->
-<!--    <div class="table-header">-->
-<!--      <span class="date_table_header">Въезд</span>-->
-<!--      <span class="date_table_header">Выезд</span>-->
-<!--      <span class="date_table_header">Страна</span>-->
-<!--      <span class="date_table_header">Отслеживать</span>-->
-<!--      <span class="date_table_header">Удалить</span>-->
-<!--    </div>-->
+<div class="wrapper">
+  <table #table mat-table [dataSource]="formArray.controls">
 
-<!--    <form *ngFor="let row of formArray.controls; let i = index; trackBy: dts.trackByIndex"-->
-<!--          [formGroup]="dts.asFormGroup(row)">-->
-<!--      <div *ngIf="i === 0 && !formArray.at(0).get('deleted')?.value" class="row-divider-top"></div>-->
-<!--      <div class="table_body" @fadeOut *ngIf="!row.get('deleted')?.value">-->
+    <!-- Entry Column -->
+    <ng-container matColumnDef="entry">
+      <th mat-header-cell *matHeaderCellDef>Въезд</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        <div [formGroup]="asFormGroup(row)" class="entry-date-picker-position">
+          <input datePickerFieldDirective
+                 [matDatepicker]="entryPicker"
+                 [datepicker]="entryPicker"
+                 formControlName="entry"
+                 placeholder="Выберите дату"
+                 type="text"
+                 class="custom_date_input"
+                 [ngClass]="{'disabled': fullNameIsPassed()}">
+          <mat-datepicker-toggle matIconSuffix
+                                 [for]="entryPicker"
+                                 class="entry-date-picker"
+          >
+          </mat-datepicker-toggle>
+          <mat-datepicker #entryPicker></mat-datepicker>
+        </div>
+      </td>
+    </ng-container>
 
-<!--        <app-date-picker formControlName="entry" placeholder="Выберите дату">></app-date-picker>-->
+    <!-- Exit Column -->
+    <ng-container matColumnDef="exit">
+      <th mat-header-cell *matHeaderCellDef>Выезд</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        <div [formGroup]="asFormGroup(row)" class="exit-date-picker-position">
+          <input datePickerFieldDirective
+                 [matDatepicker]="exitPicker"
+                 [datepicker]="exitPicker"
+                 formControlName="exit"
+                 placeholder="Выберите дату"
+                 type="text"
+                 class="custom_date_input"
+                 [ngClass]="{'disabled': fullNameIsPassed()}"
+          >
+          <mat-datepicker-toggle matIconSuffix
+                                 [for]="exitPicker"
+                                 class="exit-date-picker"
+          >
+          </mat-datepicker-toggle>
+          <mat-datepicker #exitPicker></mat-datepicker>
+        </div>
+      </td>
+    </ng-container>
 
-<!--        <app-date-picker formControlName="exit" placeholder="Выберите дату">></app-date-picker>-->
+    <!-- Country Column -->
+    <ng-container matColumnDef="country">
+      <th mat-header-cell *matHeaderCellDef>Страна</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        <ng-container [formGroup]="asFormGroup(row)">
+          <mat-form-field>
+            <mat-select formControlName="country" placeholder="Выберите страну" class="custom_text">
+              <mat-option value="ukraine">Украина</mat-option>
+              <mat-option value="moldova">Молдова</mat-option>
+              <mat-option value="uzbekistan">Узбекистан</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+      </td>
+    </ng-container>
 
-<!--        &lt;!&ndash; Country Selection &ndash;&gt;-->
-<!--        <label class="date_country__label">-->
-<!--          <app-date-country-list formControlName="country"></app-date-country-list>-->
-<!--        </label>-->
+    <!-- Disable Column -->
+    <ng-container matColumnDef="disable">
+      <th mat-header-cell *matHeaderCellDef>Отслеживать</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        <ng-container [formGroup]="asFormGroup(row)">
+          <mat-slide-toggle formControlName="disable"></mat-slide-toggle>
+        </ng-container>
+      </td>
+    </ng-container>
 
-<!--        <div class="date_disable">-->
-<!--          <mat-slide-toggle formControlName="disable"></mat-slide-toggle>-->
-<!--        </div>-->
+    <!-- Delete Column -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Удалить</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        <ng-container [formGroup]="asFormGroup(row)">
+          <button mat-icon-button (click)="deleteRow(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </ng-container>
+      </td>
+    </ng-container>
 
-<!--        <div class="checkbox_delete">-->
-<!--          <mat-checkbox formControlName="deleted"-->
-<!--                        class="checkbox"-->
-<!--                        (change)="deleteRow(i, $event.checked)">-->
-<!--          </mat-checkbox>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div *ngIf="i < formArray.controls.length - 1 && !formArray.at(i + 1).get('deleted')?.value" class="row-divider">-->
-<!--      </div>-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</div>-->
-<!--<button class="date_button"-->
-<!--        mat-fab extended-->
-<!--        (click)="addRow()"-->
-<!--        [disabled]="dts.isProfileNameEmpty || formArray.invalid">-->
-<!--  Добавить-->
-<!--</button>-->
+    <!-- Table Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumns;"
+        [formGroup]="asFormGroup(row)"
+        @fadeOut>
+    </tr>
+  </table>
+</div>
+
+<button mat-flat-button
+        class="add-button"
+        (click)="addRow()"
+        [disabled]="dateFormStatus() || fullNameIsPassed()">
+  Добавить
+</button>

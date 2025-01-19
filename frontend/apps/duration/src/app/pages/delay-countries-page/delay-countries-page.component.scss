@@ -1,8 +1,7 @@
 .container {
-  max-width: 1200px;
+  max-width: 1210px;
   margin: 0 auto;
   opacity: 0;
-  overflow: hidden;
 }
 
 .container.animated {
@@ -19,8 +18,40 @@
 }
 
 .profile_card__wrapper {
+  width: 1200px;
   margin-top: 50px;
   display: grid;
   grid-gap: 8px;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+
+.profile_card__wrapper.scrollable {
+  max-height: 642px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding-right: 0;
+  scrollbar-width: revert;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+}
+
+/* Style for Webkit Browsers (Chrome, Edge, Safari) */
+.profile_card__wrapper.scrollable::-webkit-scrollbar {
+  width: 10px; /* Adjust the scrollbar width */
+}
+
+.profile_card__wrapper.scrollable::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Light background for the track */
+}
+
+.profile_card__wrapper.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent scrollbar */
+  border-radius: 4px; /* Rounded scrollbar thumb */
+  transition: background 0.3s ease;
+}
+
+.profile_card__wrapper.scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6); /* Darker on hover */
 }
 

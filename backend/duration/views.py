@@ -165,6 +165,10 @@ class CreateProfileView(APIView):
         data = request.data.copy()
         if 'country' in data:
             data['country'] = get_country(data['country'])
+            if data['datesTable']:
+                for item in data['datesTable']:
+                    if 'country' in item:
+                        item['country'] = get_country(item['country'])
 
         serializer = CreateProfileSerializer(data=data)
         if serializer.is_valid():
