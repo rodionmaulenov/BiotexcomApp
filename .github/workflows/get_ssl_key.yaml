@@ -55,7 +55,7 @@ jobs:
         run: |
           ssh ${{ secrets.USER_FOR_EC2 }}@${{ secrets.EC2_SERVER_IP }} /bin/bash << 'EOF'
             mkdir -p /home/${{ secrets.USER_FOR_EC2 }}/backend/persistentdata/certbot/www/.well-known/acme-challenge/
-            mkdir -p /home/${{ secrets.USER_FOR_EC2 }}/backend/persistentdata/certbot/conf/live/biotexcomapplication.docktor-di.com/
+            mkdir -p /home/${{ secrets.USER_FOR_EC2 }}/backend/persistentdata/certbot/conf/live/biotexcomapp.docktor-di.com/
 
             exit 0
           EOF
@@ -78,7 +78,7 @@ jobs:
             --rm certbot certonly \
             --webroot -w /var/www/certbot \
             --email ${{ secrets.MY_EMAIL }} \
-            -d biotexcomapplication.docktor-di.com \
+            -d biotexcomapp.docktor-di.com \
             --rsa-key-size 2048 \
             --agree-tos \
             --force-renewal \
