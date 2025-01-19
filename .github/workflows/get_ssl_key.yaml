@@ -71,7 +71,7 @@ jobs:
             echo ${{ secrets.GIT_REGISTRY_ACCESS_TOKEN }} | docker login ghcr.io -u rodionmaulenov --password-stdin
 
             docker pull ghcr.io/rodionmaulenov/django-application/nginx-gensslkey:v1.0.0
-
+          
             docker compose -f docker-compose.prod.yml up -d nginx
 
             docker compose -f docker-compose.prod.yml run \
