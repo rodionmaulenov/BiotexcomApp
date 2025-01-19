@@ -58,7 +58,7 @@ export class AuthService implements OnDestroy {
     this.refresh = null
     this.token = null
     window.location.href = environment.production
-      ? `${this.baseApiUrl}/login`
+      ? `${this.baseApiUrl}login`
       : 'http://localhost:4200/'
 
   }
