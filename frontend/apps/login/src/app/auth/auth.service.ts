@@ -27,10 +27,12 @@ export class AuthService implements OnDestroy {
         this.cookieService.set('token', response.access, {
             secure: isSecure,
             sameSite: isSecure ? 'None' : 'Lax',
+            path: '/'
           })
         this.cookieService.set('refresh', response.refresh, {
             secure: isSecure,
             sameSite: isSecure ? 'None' : 'Lax',
+            path: '/'
           })
 
 

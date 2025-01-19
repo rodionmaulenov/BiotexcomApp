@@ -35,11 +35,13 @@ export class AuthService implements OnDestroy {
         this.cookieService.set('token', this.token, {
           secure: environment.production,
           sameSite: environment.production ? 'None' : 'Lax',
+          path: '/',
         })
         if (this.refresh) {
           this.cookieService.set('refresh', this.refresh, {
             secure: environment.production,
             sameSite: environment.production ? 'None' : 'Lax',
+            path: '/',
           })
         }
       }),
@@ -55,10 +57,12 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-    window.location.href = environment.production
+    const redirectUrl = environment.production
       ? `${this.baseApiUrl}login`
-      : 'http://localhost:4200/'
+      : 'http://localhost:4200/';
 
+    console.log('Redirecting to:', redirectUrl); // Add this
+    window.location.href = redirectUrl;
   }
 
 

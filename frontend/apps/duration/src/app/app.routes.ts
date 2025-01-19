@@ -16,3 +16,12 @@ export const routes: Routes = [
     canActivate: [canActivateAuth],
   },
 ];
+
+// Add this to debug navigation events
+import {Router} from '@angular/router';
+import {inject} from '@angular/core';
+
+const router = inject(Router);
+router.events.subscribe(event => {
+  console.log('Router event:', event);
+});
