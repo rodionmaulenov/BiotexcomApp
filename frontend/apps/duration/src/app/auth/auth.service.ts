@@ -57,9 +57,6 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-    console.log(environment.production
-      ? `${this.baseApiUrl}login`
-      : 'http://localhost:4200/')
     window.location.href = environment.production
       ? `${this.baseApiUrl}login`
       : 'http://localhost:4200/'
