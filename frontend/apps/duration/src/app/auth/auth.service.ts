@@ -35,13 +35,11 @@ export class AuthService implements OnDestroy {
         this.cookieService.set('token', this.token, {
           secure: environment.production,
           sameSite: environment.production ? 'None' : 'Lax',
-          path: '/',
         })
         if (this.refresh) {
           this.cookieService.set('refresh', this.refresh, {
             secure: environment.production,
             sameSite: environment.production ? 'None' : 'Lax',
-            path: '/',
           })
         }
       }),
