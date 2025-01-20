@@ -20,17 +20,17 @@ jobs:
           version: v2.1.0
           legacy: true
 
-#      - name: Build Angular application
-#        run: |
-#          cd ./frontend/apps/login
-#          npm install
-#          mkdir -p ../../../backend/nginx/static/login
-#          npm run build
-#
-#          cd ../duration
-#          npm install
-#          mkdir -p ../../../backend/nginx/static/duration
-#          npm run build
+      - name: Build Angular application
+        run: |
+          cd ./frontend/apps/login
+          npm install
+          mkdir -p ../../../backend/nginx/static/login
+          npm run build
+
+          cd ../duration
+          npm install
+          mkdir -p ../../../backend/nginx/static/duration
+          npm run build
 
       - name: Building docker images
         run: |
