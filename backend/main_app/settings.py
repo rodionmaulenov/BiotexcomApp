@@ -58,10 +58,10 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     CORS_ALLOWED_ORIGINS = [
-        "https://biotexcomapplication.docktor-di.com",
+        "https://biotexcomapp.docktor-di.com",
     ]
     CSRF_TRUSTED_ORIGINS = [
-        "https://biotexcomapplication.docktor-di.com",
+        "https://biotexcomapp.docktor-di.com",
     ]
     CSRF_COOKIE_SAMESITE = 'None'
     CSRF_COOKIE_SECURE = True
