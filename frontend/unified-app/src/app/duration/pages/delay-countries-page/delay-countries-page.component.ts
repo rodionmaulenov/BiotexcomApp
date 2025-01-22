@@ -9,7 +9,6 @@ import {PaginatorComponent} from '../../common-ui/paginator/paginator.component'
 import {ProfileFiltersComponent} from './profile-filters/profile-filters.component';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
-import {animate, style, transition, trigger} from '@angular/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UzbProfileCardComponent} from '../../common-ui/profile-card/uzb-profile-card/uzb-profile-card.component';
 import {
@@ -44,7 +43,6 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
     fullName: new FormControl('')
   });
   country = ''
-  isAnimated = false
   pageIndex = 0
   pageSize = 5
   pagination: PaginationDetails = {count: 0, next: null, previous: null}
@@ -181,28 +179,12 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
         country: this.country,
       },
       queryParamsHandling: 'merge',
-    });
+    })
   }
 
   ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
-    this.resetBodyStyle()
-  }
-
-  onAnimationStart() {
-    document.body.style.position = 'fixed'
-    document.body.style.overflow = 'hidden'
-  }
-
-  onAnimationDone() {
-    this.resetBodyStyle()
-    this.isAnimated = true
-  }
-
-  private resetBodyStyle() {
-    document.body.style.position = ''
-    document.body.style.overflow = ''
   }
 
 }

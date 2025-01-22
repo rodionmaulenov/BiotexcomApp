@@ -57,14 +57,7 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-<<<<<<< HEAD:frontend/unified-app/src/app/duration/auth/auth.service.ts
     this.router.navigate(['/login'])
-=======
-
-    window.location.href  = environment.production
-      ? `${this.baseApiUrl}/login/`
-      : 'http://localhost:4200/';
->>>>>>> origin/prod:frontend/apps/duration/src/app/auth/auth.service.ts
   }
 
 

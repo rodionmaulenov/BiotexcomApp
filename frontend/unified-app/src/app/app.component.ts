@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {NavigationEnd, NavigationStart, Router, RouterOutlet} from '@angular/router';
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 
 
 @Component({
@@ -11,18 +11,7 @@ import {NavigationEnd, NavigationStart, Router, RouterOutlet} from '@angular/rou
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  constructor(private router: Router) {
-  }
+export class AppComponent {
 
-  ngOnInit() {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        console.log('NavigationStart:', event.url)
-      }
-      if (event instanceof NavigationEnd) {
-        console.log('NavigationEnd:', event.url)
-      }
-    })
-  }
+
 }

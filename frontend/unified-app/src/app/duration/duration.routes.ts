@@ -16,18 +16,5 @@ export const routes: Routes = [
     ],
     canActivate: [canActivateAuth],
   },
-<<<<<<< HEAD:frontend/unified-app/src/app/duration/duration.routes.ts
 ]
 
-=======
-];
-
-// Add this to debug navigation events
-import {Router} from '@angular/router';
-import {inject} from '@angular/core';
-
-const router = inject(Router);
-router.events.subscribe(event => {
-  console.log('Router event:', event);
-});
->>>>>>> origin/prod:frontend/apps/duration/src/app/app.routes.ts
