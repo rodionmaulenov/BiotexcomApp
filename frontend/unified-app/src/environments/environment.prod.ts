@@ -1,9 +1,4 @@
 export const environment = {
-    production: true,
-    apiUrl: 'https://biotexcomapp.docktor-di.com/api/',
-<<<<<<< HEAD:frontend/unified-app/src/environments/environment.prod.ts
+  production: true,
+  apiUrl: 'https://biotexcomapp.docktor-di.com/api/',
 }
-=======
-};
-
->>>>>>> origin/prod:frontend/apps/login/src/environments/environment.prod.ts
