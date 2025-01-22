@@ -26,6 +26,7 @@ jobs:
           npm install
           mkdir -p ../../backend/nginx/static/angular
           npm run build
+          
 
       - name: Building docker images
         run: |
