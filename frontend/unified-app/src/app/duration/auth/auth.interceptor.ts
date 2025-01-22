@@ -4,6 +4,7 @@ import {inject} from '@angular/core';
 import {catchError, switchMap, throwError} from 'rxjs';
 import {TokenResponse} from './auth.interface';
 
+
 let isRefreshing = false
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {

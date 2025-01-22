@@ -1,7 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, viewChild} from '@angular/core';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet} from '@angular/router';
-import {MatProgressBar} from '@angular/material/progress-bar';
-import {NgIf} from '@angular/common';
 import {Subject, takeUntil, timer} from 'rxjs';
 import {SideBarComponent} from '../side-bar/side-bar.component';
 import {MatButton} from "@angular/material/button";
@@ -12,11 +10,8 @@ import {MatToolbar} from "@angular/material/toolbar";
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [MatProgressBar, NgIf, SideBarComponent, MatButton, MatIcon, MatToolbar, RouterOutlet],
+  imports: [SideBarComponent, MatButton, MatIcon, MatToolbar, RouterOutlet],
   template: `
-    <!-- 🛠️ Progress Bar: Visible during navigation & initial load -->
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-
     <!-- 🛠️ Toolbar -->
     <mat-toolbar>
       <button mat-button (click)="toggleOpenCloseMenu()">

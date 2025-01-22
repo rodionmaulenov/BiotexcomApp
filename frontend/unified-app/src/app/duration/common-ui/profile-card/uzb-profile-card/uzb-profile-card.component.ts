@@ -41,7 +41,7 @@ export class UzbProfileCardComponent {
 
 
   onSubmit(profile_id: number): void {
-    this.router.navigate(['/change-profile', profile_id.toString()], {
+    this.router.navigate(['/duration/change-profile', profile_id.toString()], {
       queryParams: {
         country: this.route.snapshot.queryParams['country'],
         page: this.route.snapshot.queryParams['page'],

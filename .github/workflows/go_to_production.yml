@@ -22,14 +22,9 @@ jobs:
 
       - name: Build Angular application
         run: |
-          cd ./frontend/apps/login
+          cd ./frontend/unified-app
           npm install
-          mkdir -p ../../../backend/nginx/static/login
-          npm run build
-          
-          cd ../duration
-          npm install
-          mkdir -p ../../../backend/nginx/static/duration
+          mkdir -p ../../backend/nginx/static/login
           npm run build
 
       - name: Building docker images

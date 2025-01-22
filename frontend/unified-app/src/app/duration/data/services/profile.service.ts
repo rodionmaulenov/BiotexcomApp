@@ -2,7 +2,7 @@ import {inject, Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {PaginatedResponse, PaginationDetails, Profile, ProfileResults} from '../interfaces/profile.interface';
 import {map, Observable, of, Subject, takeUntil} from 'rxjs';
-import {environment} from '../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 
 
 @Injectable({providedIn: 'root'})

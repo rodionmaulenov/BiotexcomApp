@@ -9,6 +9,5 @@ export const canActivateAuth = () => {
     authService.logout()
     return false
   }
-
   return true
 }

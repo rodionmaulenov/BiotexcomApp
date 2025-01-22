@@ -1,10 +1,11 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ProfileNameCountryResults, ProfileNameResults} from '../interfaces/profile.interface';
+import {ProfileNameCountryResults} from '../interfaces/profile.interface';
 import {CreateProfileINT} from '../../pages/create-profile-page/data/interfaces/create-page.interface';
 import {ChangeProfileINT} from '../../pages/change-profile-page/data/interfaces/submit.interface';
-import {environment} from '../../../environments/environment';
+import {environment} from '../../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'

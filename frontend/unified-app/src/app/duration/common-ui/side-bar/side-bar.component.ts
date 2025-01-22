@@ -79,7 +79,7 @@ export class SideBarComponent implements OnInit {
   protected navigateTo(country: string): void {
     this.isOpen.set(false)
     this.expansionPanel().close()
-    this.router.navigate(['/delay'], {queryParams: {country}})
+    this.router.navigate(['/duration/delay'], {queryParams: {country}})
   }
 
 
@@ -87,7 +87,7 @@ export class SideBarComponent implements OnInit {
     this.isOpen.set(false)
     this.expansionPanel().close()
     this.renderer.removeClass(document.body, 'no-scroll')
-    this.router.navigate(['/create-profile'])
+    this.router.navigate(['/duration/create-profile'])
   }
 }
 

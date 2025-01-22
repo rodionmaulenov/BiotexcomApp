@@ -4,7 +4,7 @@ import {catchError, Subject, takeUntil, tap, throwError} from 'rxjs';
 import {TokenResponse} from './auth.interface';
 import {CookieService} from 'ngx-cookie-service';
 import {Router} from '@angular/router';
-import {environment} from '../../environments/environment';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable({providedIn: 'root'})
@@ -57,10 +57,7 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-    window.location.href = environment.production
-      ? `${this.baseApiUrl}/login`
-      : 'http://localhost:4200/'
-
+    this.router.navigate(['/login'])
   }
 
 

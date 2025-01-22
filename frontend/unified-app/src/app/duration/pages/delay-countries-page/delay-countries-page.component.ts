@@ -27,14 +27,6 @@ import {
   templateUrl: './delay-countries-page.component.html',
   styleUrl: './delay-countries-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({opacity: 0, transform: 'translateY(60px)'}), // Start hidden and below
-        animate('0.45s ease-out', style({opacity: 1, transform: 'translateY(0)'})) // Fade in and move to original position
-      ])
-    ])
-  ]
 })
 export class DelayCountriesPageComponent implements OnInit, OnDestroy {
   profileService: ProfileService = inject(ProfileService)
