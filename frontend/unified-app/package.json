@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD:frontend/unified-app/package.json
   "name": "unified-app",
-=======
-  "name": "timestamp-calendar",
->>>>>>> origin/prod:frontend/apps/duration/package.json
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
