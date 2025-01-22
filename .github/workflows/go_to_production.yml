@@ -24,7 +24,16 @@ jobs:
         run: |
           cd ./frontend/unified-app
           npm install
+<<<<<<< HEAD
           mkdir -p ../../backend/nginx/static/login
+=======
+          mkdir -p ../../../backend/nginx/static/login
+          npm run build
+
+          cd ../duration
+          npm install
+          mkdir -p ../../../backend/nginx/static/duration
+>>>>>>> origin/prod
           npm run build
 
       - name: Building docker images
