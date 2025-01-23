@@ -1,6 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from './auth.service';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 
 
 @Component({
@@ -8,7 +10,9 @@ import {AuthService} from './auth.service';
   standalone: true,
   templateUrl: './login.component.html',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule,
+    MatButtonModule
   ],
   styleUrl: './login.component.scss'
 })
@@ -18,6 +22,7 @@ export class LoginComponent {
     username: new FormControl<string>('', {nonNullable: true, validators: Validators.required}),
     password: new FormControl<string>('', {nonNullable: true, validators: Validators.required}),
   })
+  isPasswordVisible = signal(false)
 
   onSubmit() {
     if (this.form.valid) {

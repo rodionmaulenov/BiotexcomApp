@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   EventEmitter,
   inject,
@@ -36,6 +36,8 @@ import {PaginatorComponent} from '../paginator/paginator.component';
 import {russianPaginatorIntl} from '../paginator/paginator-rus.service';
 import {fadeOut} from '../../../data/animations/delete-animations';
 import {DatePickerFieldDirective} from '../../../common-ui/directives/date-picker-field.directive';
+import {crossRowDateValidator, entryExitDateValidator} from '../../create-profile-page/dates-table/validators';
+import {NgIf} from '@angular/common';
 
 
 export type TableFields = {
@@ -53,7 +55,7 @@ export type TableFields = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatTableModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatInputModule,
     MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatSlideToggleModule, ReactiveFormsModule,
-    MatButtonModule, MatIconModule, PaginatorComponent, DatePickerFieldDirective
+    MatButtonModule, MatIconModule, PaginatorComponent, DatePickerFieldDirective, NgIf
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -71,6 +73,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   private readonly EmptyFormServ = inject(DateEmptyControlService)
   private readonly FormFieldsServ = inject(DateChangeTrackingService)
   protected readonly FormUtils = inject(FormArrayUtilityService)
+  protected readonly cdr = inject(ChangeDetectorRef)
   protected readonly displayedColumns: string[] = ['entry', 'exit', 'country', 'disable', 'days_left', 'delete']
   protected formArray = new FormArray<FormGroup>([])
   private destroy$ = new Subject<void>()
@@ -81,6 +84,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   childFormStatus = model<boolean>()
   lengthNotZero = model<boolean>()
   formInputData = input<FetchDate[] | []>([])
+  profileName = input<string>('')
   @Output() childFormDataPush = new EventEmitter<SubmitData[]>()
   childPaginator = viewChild.required(PaginatorComponent)
   table = viewChild<MatTable<TableFields>>('table')
@@ -89,12 +93,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   ngOnChanges({formInputData}: SimpleChanges) {
     if (formInputData && !formInputData.firstChange) {
       const {currentValue} = formInputData
-
-      if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
-        this.addRow()
-      } else {
-        this.formArray = this.FilledFormServ.createFormArrayFromDates(currentValue)
-      }
+      this.formArray = this.FilledFormServ.createFormArrayFromDates(currentValue)
 
       const paginator = this.childPaginator()
       const table = this.table()
@@ -113,6 +112,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
       this.formArray.valueChanges
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
+          this.reapplyValidators()
           this.childFormStatus.set(this.formArray.invalid)
         })
     }
@@ -121,8 +121,10 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
 
   protected addRow() {
     const uniqueID = this.FormUtils.generateID()
+    const previousRow = this.formArray.length > 0 ? this.formArray.at(this.formArray.length - 1) as FormGroup : null
+
     // Create a new FormGroup for the row
-    const newRow = this.EmptyFormServ.initEmptyDateForm(uniqueID)
+    const newRow = this.EmptyFormServ.initEmptyDateForm(uniqueID, previousRow)
     // Add the new row to the FormArray
     this.formArray.push(newRow)
     this.FormFieldsServ.trackDateChanges(newRow, this.destroy$, this.restrictUpdating)
@@ -155,10 +157,22 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
       this.childPaginator().updatePaginatedData()
       this.childFormStatus.set(this.formArray.invalid)
       this.restrictUpdating.set(true)
+      this.reapplyValidators()
       this.lengthNotZero.set(this.formArray.controls
         .filter(control => control.get('deleted')?.value !== true).length == 0
       )
     }, 100)
+  }
+
+  private reapplyValidators(): void {
+    this.formArray.controls.forEach((control, index) => {
+      const previousRow = index > 0 ? this.formArray.at(index - 1) : null
+      control.setValidators([
+        entryExitDateValidator(),
+        crossRowDateValidator(previousRow as FormGroup),
+      ])
+      control.updateValueAndValidity({emitEvent: false})
+    })
   }
 
 
@@ -174,7 +188,6 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
 
   protected onExtendClick(): void {
     this.FormUtils.updateOldAndNEwRowsNoTrack(this.formArray)
-
     this.isExtendButtonDisabled = true
   }
 

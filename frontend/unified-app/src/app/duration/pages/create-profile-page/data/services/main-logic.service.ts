@@ -24,8 +24,9 @@ export class MainLogicService {
   ): Observable<{ country: string }> {
     if (form.invalid) return of({country: ''})
     form.markAllAsTouched()
-    dateComponent.emitFormArrayData()
-    const dateDate = dateComponent.dateFormData() as SubmitDateForm[] || []
+    const datesTableInstance = dateComponent
+    datesTableInstance.emitFormArrayData()
+    const dateDate = datesTableInstance.dateFormData() as SubmitDateForm[] || []
     const formValue: CreateProfileINT = {...form.value, datesTable: dateDate}
     const latestSubmitData = this.latestSubmitFormData(dateDate)
     formValue.country = searchList
@@ -38,9 +39,9 @@ export class MainLogicService {
         next: () => {
           this.profileService.clearCache()
           form.reset()
-          dateComponent.formArray.reset()
+          datesTableInstance.resetForm()
           if (!notProceed) {
-            this.router.navigate(['/delay'], {
+            this.router.navigate(['/duration/delay'], {
               queryParams: {
                 country: searchList
                   ? searchList.selectedCountry()

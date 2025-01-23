@@ -11,8 +11,8 @@ import {environment} from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class CreateProfileService {
-  private http: HttpClient = inject(HttpClient)
-    baseApiUrl: string = environment.apiUrl
+  private readonly http: HttpClient = inject(HttpClient)
+  private readonly baseApiUrl: string = environment.apiUrl
 
   getProfilesByName(searchQuery: string): Observable<ProfileNameCountryResults> {
     const url = `${this.baseApiUrl}last_five_profiles/`

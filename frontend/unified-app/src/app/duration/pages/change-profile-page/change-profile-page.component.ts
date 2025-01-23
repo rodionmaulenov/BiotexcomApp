@@ -16,7 +16,6 @@ import {ChangeProfileINT} from './data/interfaces/submit.interface';
 import {Subject, takeUntil} from 'rxjs';
 import {Location} from '@angular/common';
 import {MatFabButton} from '@angular/material/button';
-import {animate, style, transition, trigger} from '@angular/animations';
 import {MatFormField} from '@angular/material/form-field';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
@@ -64,6 +63,7 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
   protected lengthNotZero = false
   form!: FormGroup
   relatedDates!: FetchDate[] | []
+  profileName = ''
   updatedDates: SubmitData[] = []
   destroy$ = new Subject<void>()
 
@@ -77,6 +77,7 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: FetchProfile) => {
           const profileData = new FetchProfile(data)
+          this.profileName = data.full_name
           this.form = this.FormService.createProfileForm(profileData)
           this.relatedDates = profileData.relatedDates || []
           this.cdr.detectChanges()
@@ -147,7 +148,7 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
 
   private handleNavigation(shouldRedirect: boolean, formCountry: string, latestCountry: string): void {
     if (shouldRedirect) {
-      this.router.navigate(['/delay'], {
+      this.router.navigate(['/duration/delay'], {
         queryParams: {
           country: formCountry === 'notInProgram' ? formCountry : latestCountry
         }

@@ -1,11 +1,47 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label>
-    Username:
-    <input formControlName="username"/>
-  </label>
-  <label>
-    Password:
-    <input formControlName="password" type="password"/>
-  </label>
-  <button type="submit">Login</button>
-</form>
+<div class="custom-background">
+  <div class="login_wrap">
+    <form
+      (ngSubmit)="onSubmit()"
+      class="login-form"
+      [formGroup]="form">
+
+      <h1 class="h1 mb60">Вход</h1>
+
+      <label class="login-label mb16">
+        Твой логин
+        <input
+          formControlName="username"
+          class="login-input"
+          type="text"
+          placeholder="Введите логин"
+          autocomplete="username"/>
+      </label>
+
+      <label class="login-label mb32">
+        Пароль
+        <div class="password-input">
+          <input
+            formControlName="password"
+            class="login-input"
+            [type]="isPasswordVisible() ? 'text' : 'password'"
+            placeholder="Введите пароль"
+            autocomplete="current-password"/>
+
+          <button
+            type="button"
+            (click)="isPasswordVisible.set(!isPasswordVisible())"
+            class="password-yey-btn">
+            @if (!isPasswordVisible()) {
+              <mat-icon>visibility</mat-icon>
+            } @else {
+              <mat-icon>visibility_off</mat-icon>
+            }
+          </button>
+        </div>
+      </label>
+
+      <button mat-fab extended type="submit" class="btn btn_shadow">Войти</button>
+
+    </form>
+  </div>
+</div>

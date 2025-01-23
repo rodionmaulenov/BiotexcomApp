@@ -1,7 +1,7 @@
 from django.urls import path
 
 from duration.views import SurrogacyListView, ControlDateView, SearchProfileView, \
-    LastFiveProfilesView, CreateProfileView, SurrogacyMotherDetailView, ProfileUpdateView
+    LastFiveProfilesView, CreateProfileView, SurrogacyMotherDetailView, ProfileUpdateView, LastDateIdView
 
 urlpatterns = [
     path('countries/', SurrogacyListView.as_view(), name='countries'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('update/<int:id>', ProfileUpdateView.as_view(), name='update'),
     path('profile/<int:id>/', SurrogacyMotherDetailView.as_view(), name='profile-detail'),
     path('last_five_profiles/', LastFiveProfilesView.as_view(), name='last_five_profiles'),
+    path('last_date_id/', LastDateIdView.as_view(), name='last_date_id'),
 ]

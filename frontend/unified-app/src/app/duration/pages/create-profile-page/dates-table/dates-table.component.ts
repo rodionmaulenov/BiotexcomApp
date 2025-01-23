@@ -29,9 +29,10 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {TableFields} from '../../change-profile-page/dates-change-table/dates-change-table.component';
 import {DatePickerFieldDirective} from '../../../common-ui/directives/date-picker-field.directive';
-import {NgClass} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {CUSTOM_DATE_FORMATS, CustomDateAdapter} from '../../../data/rus_datepicker/rus-datepicker';
 import {fadeOut} from './animations';
+import {crossRowDateValidator, entryExitDateValidator} from './validators';
 
 
 @Component({
@@ -40,7 +41,7 @@ import {fadeOut} from './animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatTableModule, MatPaginatorModule, FormsModule, MatDatepickerModule,
     MatNativeDateModule, MatSelectModule, MatSlideToggleModule, ReactiveFormsModule,
-    MatButtonModule, MatIconModule, DatePickerFieldDirective, NgClass
+    MatButtonModule, MatIconModule, DatePickerFieldDirective, NgClass, NgIf
   ],
   templateUrl: './dates-table.component.html',
   styleUrl: './dates-table.component.scss',
@@ -78,10 +79,21 @@ export class DatesTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.formArray.statusChanges
+    this.formArray.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.dateFormStatus.set(this.formArray.invalid)
+    })
+
+    this.formArray.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.dateFormStatus.set(this.formArray.invalid)
+        this.formArray.controls.forEach((control, index) => {
+          const previousRow = index > 0 ? this.formArray.at(index - 1) : null
+          control.setValidators([
+            entryExitDateValidator(),
+            crossRowDateValidator(previousRow as FormGroup),
+          ])
+          control.updateValueAndValidity({emitEvent: false})
+        })
       })
   }
 
@@ -93,7 +105,8 @@ export class DatesTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   protected addRow() {
-    this.formArray.push(this.EmptyFormServ.createGroup())
+    const previousRow = this.formArray.length > 0 ? this.formArray.at(this.formArray.length - 1) : null
+    this.formArray.push(this.EmptyFormServ.createGroup(previousRow as FormGroup))
     this.dateFormStatus.set(this.formArray.invalid)
     this.table().renderRows()
   }
@@ -120,6 +133,11 @@ export class DatesTableComponent implements OnInit, OnDestroy, AfterViewInit {
     return row as FormGroup
   }
 
+  public resetForm() {
+    this.formArray.clear()
+    this.table().renderRows()
+    this.addRow()
+  }
 
   ngOnDestroy(): void {
     this.MainLogicServ.destroy()

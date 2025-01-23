@@ -8,7 +8,6 @@ import {Subject, takeUntil} from 'rxjs';
 export class DateFormService implements OnDestroy {
   private destroy$ = new Subject<void>()
 
-
   public createFormArrayFromDates(dates: FetchDate[] = []): FormArray {
     const sortedDates = this.sortDates(dates)
     const formGroups = sortedDates.map((date) => this.createDateForm(date))
@@ -20,7 +19,6 @@ export class DateFormService implements OnDestroy {
 
     return formArray
   }
-
 
   private createDateForm(date: FetchDate): FormGroup {
     return new FormGroup({
@@ -35,7 +33,7 @@ export class DateFormService implements OnDestroy {
       deleted: new FormControl(false),
       status: new FormControl('old'),
       updated: new FormControl(false),
-    });
+    })
   }
 
   private sortDates(dates: FetchDate[]): FetchDate[] {
@@ -49,16 +47,15 @@ export class DateFormService implements OnDestroy {
       const bCreated = new Date(b.created).getTime()
 
       if (bEntry < aEntry && bExit < aExit && bCreated > aCreated) {
-        return 1;
+        return 1
       }
       if (aEntry < bEntry && aExit < bExit && aCreated > bCreated) {
-        return -1;
+        return -1
       }
 
       return aCreated - bCreated
-    });
+    })
   }
-
 
   private attachChangeDetection(group: FormGroup): void {
     group.valueChanges
@@ -67,9 +64,8 @@ export class DateFormService implements OnDestroy {
         if (group.get('status')?.value === 'old') {
           group.get('updated')?.setValue(true, {emitEvent: false})
         }
-      });
+      })
   }
-
 
   ngOnDestroy() {
     this.destroy$.next()
