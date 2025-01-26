@@ -198,12 +198,4 @@ class ProfileUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LastDateIdView(APIView):
-    def get(self, request, *args, **kwargs):
-        full_name = request.GET.get('full_name', None)
-        instance = get_object_or_404(SurrogacyMother, full_name=full_name)
-        date = instance.related_dates.order_by('id').last()
-        pk = date.id + 1
-        return Response({'id': pk})
-
 

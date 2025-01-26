@@ -84,7 +84,6 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   childFormStatus = model<boolean>()
   lengthNotZero = model<boolean>()
   formInputData = input<FetchDate[] | []>([])
-  profileName = input<string>('')
   @Output() childFormDataPush = new EventEmitter<SubmitData[]>()
   childPaginator = viewChild.required(PaginatorComponent)
   table = viewChild<MatTable<TableFields>>('table')

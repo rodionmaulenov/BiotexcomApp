@@ -38,8 +38,6 @@ export class MainLogicService {
       .subscribe({
         next: () => {
           this.profileService.clearCache()
-          form.reset()
-          datesTableInstance.resetForm()
           if (!notProceed) {
             this.router.navigate(['/duration/delay'], {
               queryParams: {
@@ -47,6 +45,13 @@ export class MainLogicService {
                   ? searchList.selectedCountry()
                   : latestSubmitData.country,
               },
+            })
+          } else {
+            // Reload the current page
+            this.router.navigate([], {
+              queryParamsHandling: 'merge',
+            }).then(() => {
+              window.location.reload()
             })
           }
         },

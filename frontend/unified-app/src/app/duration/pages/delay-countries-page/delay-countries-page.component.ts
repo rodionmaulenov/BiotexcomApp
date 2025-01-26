@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component, ElementRef,
+  inject,
+  OnDestroy,
+  OnInit, Renderer2,
+  signal, viewChild,
+} from '@angular/core';
 import {ProfileCardComponent} from '../../common-ui/profile-card/profile-card.component';
 import {ProfileService} from '../../data/services/profile.service';
 import {notInProgramProfile, PaginationDetails, Profile, ProfileUzb} from '../../data/interfaces/profile.interface';
@@ -14,6 +23,7 @@ import {UzbProfileCardComponent} from '../../common-ui/profile-card/uzb-profile-
 import {
   NotInProgramProfileCardComponent
 } from '../../common-ui/profile-card/not-in-program-profile-card/not-in-program-profile-card.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -21,17 +31,19 @@ import {
   standalone: true,
   imports: [
     ProfileCardComponent, NgForOf, PaginatorComponent, ProfileFiltersComponent, NgClass, UzbProfileCardComponent,
-    NotInProgramProfileCardComponent
+    NotInProgramProfileCardComponent, MatProgressSpinnerModule
   ],
   templateUrl: './delay-countries-page.component.html',
   styleUrl: './delay-countries-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DelayCountriesPageComponent implements OnInit, OnDestroy {
-  profileService: ProfileService = inject(ProfileService)
-  route = inject(ActivatedRoute)
-  router = inject(Router)
-  cdr = inject(ChangeDetectorRef)
+export class DelayCountriesPageComponent implements OnInit, OnDestroy, AfterViewChecked {
+  private readonly profileService: ProfileService = inject(ProfileService)
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly cdr = inject(ChangeDetectorRef)
+  private readonly renderer = inject(Renderer2)
+  private readonly destroy$ = new Subject<void>()
   uzbProfiles: ProfileUzb[] = []
   notInProgramProfiles: notInProgramProfile[] = []
   nonUzbProfiles: Profile[] = []
@@ -41,13 +53,23 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
   paginatorIsNotVisible = false
   searchForm = new FormGroup({
     fullName: new FormControl('')
-  });
+  })
   country = ''
   pageIndex = 0
   pageSize = 5
   pagination: PaginationDetails = {count: 0, next: null, previous: null}
 
-  private destroy$ = new Subject<void>()
+  responseProfiles = signal(true)
+  profileCardWrapper = viewChild<ElementRef>('profileCardWrapper')
+
+  // add class for scrolling
+  ngAfterViewChecked(): void {
+    const profileCardWrapper = this.profileCardWrapper()
+    if (profileCardWrapper) {
+      this.renderer.addClass(profileCardWrapper.nativeElement, 'scrollable')
+    }
+  }
+
 
   trackByProfileUzbId(index: number, profile: ProfileUzb): number {
     return profile.id
@@ -74,6 +96,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
     this.loadProfilesFromQueryParams()
   }
 
+
   initSubscriptions() {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -87,7 +110,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
       })
 
     this.searchForm.valueChanges
-      .pipe(takeUntil(this.destroy$), debounceTime(300))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(({fullName}) => {
         if (fullName) {
           this.searchProfiles(fullName)
@@ -106,7 +129,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
       this.pageSize = +params['pageSize'] || 5
       this.loadProfiles(this.pageIndex + 1, this.pageSize)
       this.cdr.markForCheck()
-    });
+    })
   }
 
 
@@ -117,7 +140,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
         this.pagination = response.pagination
         this.processProfiles(response.profiles)
         this.cdr.markForCheck()
-      });
+      })
   }
 
   searchProfiles(query: string) {
@@ -135,6 +158,7 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
     this.nonUzbProfiles = profiles.filter(profile =>
       !this.isProfileUzb(profile) && !this.isNotInProgramProfile(profile)
     ) as Profile[]
+    this.responseProfiles.set(false)
   }
 
 
@@ -185,6 +209,11 @@ export class DelayCountriesPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
-  }
 
+    // remove class for scrolling
+    const profileCardWrapper = this.profileCardWrapper()
+    if (profileCardWrapper) {
+      this.renderer.removeClass(profileCardWrapper.nativeElement, 'scrollable')
+    }
+  }
 }

@@ -63,7 +63,6 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
   protected lengthNotZero = false
   form!: FormGroup
   relatedDates!: FetchDate[] | []
-  profileName = ''
   updatedDates: SubmitData[] = []
   destroy$ = new Subject<void>()
 
@@ -77,7 +76,6 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: FetchProfile) => {
           const profileData = new FetchProfile(data)
-          this.profileName = data.full_name
           this.form = this.FormService.createProfileForm(profileData)
           this.relatedDates = profileData.relatedDates || []
           this.cdr.detectChanges()

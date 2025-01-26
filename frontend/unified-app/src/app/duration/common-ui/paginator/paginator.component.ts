@@ -27,33 +27,30 @@ import {PaginatorSignalService} from './signal.service';
   `,
   styleUrl: './paginator.component.scss',
 })
-export class PaginatorComponent implements OnDestroy, OnInit {
+export class PaginatorComponent implements OnDestroy {
   private paginator = inject(PaginatorSignalService)
+  private renderer = inject(Renderer2)
 
   @Input() pagination: PaginationDetails = {count: 0, next: null, previous: null}
   @Input() pageSize = 5
   @Input() pageIndex = 0
   @Output() pageChange = new EventEmitter<PageEvent>()
 
-  ngOnInit(): void {
-     const profileCardWrapper = document.querySelector('.profile_card__wrapper')
-    if (this.pageSize >= 10) {
-      profileCardWrapper?.classList.add('scrollable') // Add scrollable class
-    } else {
-      profileCardWrapper?.classList.remove('scrollable') // Remove scrollable class
-    }
-  }
-
-
   onPageChange(event: PageEvent): void {
+    this.pageSize = event.pageSize
     this.paginator.clickPageSize(true)
     this.pageChange.emit(event)
+    this.applyScrollableClass()
+  }
 
+  private applyScrollableClass(): void {
     const profileCardWrapper = document.querySelector('.profile_card__wrapper')
-    if (event.pageSize >= 10) {
-      profileCardWrapper?.classList.add('scrollable') // Add scrollable class
-    } else {
-      profileCardWrapper?.classList.remove('scrollable') // Remove scrollable class
+    if (profileCardWrapper) {
+      if (this.pageSize >= 10) {
+        this.renderer.addClass(profileCardWrapper, 'scrollable')
+      } else {
+        this.renderer.removeClass(profileCardWrapper, 'scrollable')
+      }
     }
   }
 

@@ -37,7 +37,6 @@ export class CreateProfilePageComponent implements OnDestroy, OnInit {
   })
 
   dateComponent = viewChild.required(DatesTableComponent)
-  avatarComponent = viewChild.required(AvatarUploadComponent)
   searchListComponent = viewChild.required(ProfileSearchListComponent)
 
 
@@ -66,10 +65,8 @@ export class CreateProfilePageComponent implements OnDestroy, OnInit {
   protected onSubmitAndProceed(): void {
     if (this.fullNameIsPassed) {
       this.MainLogicServ.handleSubmitForm(this.dateComponent(), this.form, true, this.searchListComponent())
-      this.avatarComponent().resetAvatar()
     }
     this.MainLogicServ.handleSubmitForm(this.dateComponent(), this.form, true)
-    this.avatarComponent().resetAvatar()
   }
 
 

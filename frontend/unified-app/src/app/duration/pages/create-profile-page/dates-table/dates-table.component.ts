@@ -133,12 +133,6 @@ export class DatesTableComponent implements OnInit, OnDestroy, AfterViewInit {
     return row as FormGroup
   }
 
-  public resetForm() {
-    this.formArray.clear()
-    this.table().renderRows()
-    this.addRow()
-  }
-
   ngOnDestroy(): void {
     this.MainLogicServ.destroy()
     this.destroy$.next()

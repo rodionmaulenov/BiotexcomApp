@@ -1,3 +1,13 @@
+@use '@angular/material' as mat;
+
+:host {
+  @include mat.progress-spinner-overrides((
+    size: 100rem,
+    active-indicator-width: 100,
+    active-indicator-color: blue,
+  ));
+}
+
 .container {
   max-width: 1210px;
   margin: 0 auto;
@@ -24,7 +34,6 @@
 .profile_card__wrapper.scrollable {
   max-height: 642px;
   overflow-y: scroll;
-  scroll-behavior: smooth;
   padding-right: 0;
   scrollbar-width: revert;
   -webkit-overflow-scrolling: touch;
@@ -36,17 +45,14 @@
   width: 10px; /* Adjust the scrollbar width */
 }
 
-.profile_card__wrapper.scrollable::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1); /* Light background for the track */
-}
 
-.profile_card__wrapper.scrollable::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.4); /* Semi-transparent scrollbar */
-  border-radius: 4px; /* Rounded scrollbar thumb */
-  transition: background 0.3s ease;
+.place_spinner {
+  position: fixed; /* Ensures it covers the viewport */
+  top: 50%; /* Moves the spinner to the vertical center */
+  left: 50%; /* Moves the spinner to the horizontal center */
+  transform: translate(-50%, -50%); /* Adjusts the spinner to be perfectly centered */
+  display: flex; /* Enables flexbox layout */
+  align-items: center; /* Centers vertically */
+  justify-content: center; /* Centers horizontally */
+  z-index: 1000; /* Places it above other elements */
 }
-
-.profile_card__wrapper.scrollable::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.6); /* Darker on hover */
-}
-

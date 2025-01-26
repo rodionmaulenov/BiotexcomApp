@@ -57,7 +57,7 @@ export class AuthService implements OnDestroy {
     this.cookieService.deleteAll()
     this.refresh = null
     this.token = null
-    this.router.navigate(['/login'])
+    this.router.navigate(['/'])
   }
 
 
