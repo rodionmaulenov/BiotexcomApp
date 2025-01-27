@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal, ViewChild
 } from '@angular/core';
 import {AvatarUploadComponent} from "../create-profile-page/avatar-upload/avatar-upload.component";
 import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -35,16 +35,15 @@ const countries_for_dates = {
   'UKR': 'ukraine',
   'MLD': 'moldova',
   'UZB': 'uzbekistan',
-
 }
-
 
 @Component({
   selector: 'app-change-profile-page',
   standalone: true,
   imports: [
     AvatarUploadComponent, FormsModule, ReactiveFormsModule, NgIf, MatIconModule,
-    DatesChangeTableComponent, MatFabButton, MatFormField, MatOption, MatSelect, MatInputModule, FocusInteractionDirective
+    DatesChangeTableComponent, MatFabButton, MatFormField, MatOption, MatSelect, MatInputModule,
+    FocusInteractionDirective
   ],
   templateUrl: './change-profile-page.component.html',
   styleUrl: './change-profile-page.component.scss',
@@ -78,7 +77,7 @@ export class ChangeProfilePageComponent implements OnInit, OnDestroy {
           const profileData = new FetchProfile(data)
           this.form = this.FormService.createProfileForm(profileData)
           this.relatedDates = profileData.relatedDates || []
-          this.cdr.detectChanges()
+          this.cdr.markForCheck()
         })
     }
   }

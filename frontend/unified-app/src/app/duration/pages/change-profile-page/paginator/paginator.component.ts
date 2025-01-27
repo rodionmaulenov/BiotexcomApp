@@ -69,7 +69,10 @@ export class PaginatorComponent {
 
       this.paginatedData.set(visibleRows.slice(startIndex, endIndex))
 
-      if (table) table.renderRows()
+      if (table) {
+        // Render the updated rows
+        table.renderRows()
+      }
 
       this.cdr.markForCheck()
     }

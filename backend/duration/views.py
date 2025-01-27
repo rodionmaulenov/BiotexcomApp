@@ -50,9 +50,9 @@ class SurrogacyListView(ListAPIView):
         country = self.request.GET.get('country', None)
         if len(country) > 3:
             country = get_country(country)
-        if country == 'uzbekistan':
+        if country == 'UZB':
             return get_uzb_queryset(queryset)
-        elif country == 'notInProgram':
+        elif country == 'NIP':
             return get_nip_queryset(queryset)
         else:
             return get_ukr_or_mld_queryset(queryset, country)
