@@ -55,7 +55,8 @@ export type TableFields = {
   selector: 'app-dates-change-table',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatInputModule,
+  imports: [
+    MatTableModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatInputModule,
     MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatSlideToggleModule, ReactiveFormsModule,
     MatButtonModule, MatIconModule, PaginatorComponent, DatePickerFieldDirective, NgIf,
     MatProgressSpinnerModule
@@ -91,21 +92,15 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
   childPaginator = viewChild.required(PaginatorComponent)
   table = viewChild<MatTable<TableFields>>('table')
 
-
-  ngOnChanges({formInputData}: SimpleChanges) {
+  ngOnChanges({formInputData}: SimpleChanges): void {
     if (formInputData && !formInputData.firstChange) {
       const {currentValue} = formInputData
       this.formArray = this.FilledFormServ.createFormArrayFromDates(currentValue)
+      this.reapplyValidators()
+      this.childFormStatus.set(this.formArray.invalid)
 
-      const paginator = this.childPaginator()
-      const table = this.table()
-      if (paginator && table) {
-        paginator.formArray.set(this.formArray)
-        paginator.table.set(table)
-        paginator.updatePaginatedData()
-      }
-
-      this.formArray.controls.forEach((control) => {
+      // Ensure paginator and table are initialized after Angular renders them
+      setTimeout(() => {
         const paginator = this.childPaginator()
         const table = this.table()
         if (paginator && table) {
@@ -113,7 +108,10 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
           paginator.table.set(table)
           paginator.gotoLastPage()
         }
-        this.FormFieldsServ.trackDateChanges(control as FormGroup, this.destroy$, this.restrictUpdating)
+        this.formArray.controls.forEach((control) => {
+          this.FormFieldsServ.trackDateChanges(control as FormGroup, this.destroy$, this.restrictUpdating)
+        })
+        this.cdr.markForCheck()
       })
 
       this.formArray.valueChanges
@@ -123,6 +121,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
           this.childFormStatus.set(this.formArray.invalid)
         })
     }
+
   }
 
 

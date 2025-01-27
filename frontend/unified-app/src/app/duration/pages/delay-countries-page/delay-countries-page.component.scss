@@ -2,8 +2,6 @@
 
 :host {
   @include mat.progress-spinner-overrides((
-    size: 100rem,
-    active-indicator-width: 100,
     active-indicator-color: blue,
   ));
 }

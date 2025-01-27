@@ -20,6 +20,10 @@
     width: 93%;
   }
 
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: blue,
+  ));
+
   @include mat.table-overrides((
     header-headline-color: rgba(255, 255, 255, 0.75),
     header-container-height: 55px,
@@ -142,3 +146,9 @@ input.mat-mdc-form-field-input-control::placeholder {
   font-size: 12px;
   margin-bottom: 6px;
 }
+
+.custom-spinner {
+  margin-left: 400px;
+  margin-top: 20px;
+}
+
