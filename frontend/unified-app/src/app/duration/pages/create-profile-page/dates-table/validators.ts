@@ -6,7 +6,7 @@ export function entryExitDateValidator(): ValidatorFn {
     const entry = group.get('entry')?.value
     const exit = group.get('exit')?.value
 
-     // Normalize both dates to Date objects
+    // Normalize both dates to Date objects
     const currentEntry = entry ? new Date(new Date(entry).setHours(0, 0, 0, 0)) : null
     const currentExit = exit ? new Date(new Date(exit).setHours(0, 0, 0, 0)) : null
 
@@ -20,6 +20,11 @@ export function entryExitDateValidator(): ValidatorFn {
 export function crossRowDateValidator(previousRow: AbstractControl | null): ValidatorFn {
   return (currentRow: AbstractControl): ValidationErrors | null => {
     if (!previousRow) return null
+
+    const previousStatus = previousRow?.get('status')?.value;
+    if (previousStatus === 'deleted') {
+      return null; // Skip validation if the previous row is deleted
+    }
 
     const entry = currentRow.get('entry')?.value
     const previousExit = previousRow.get('exit')?.value
