@@ -21,9 +21,9 @@ export function crossRowDateValidator(previousRow: AbstractControl | null): Vali
   return (currentRow: AbstractControl): ValidationErrors | null => {
     if (!previousRow) return null
 
-    const previousStatus = previousRow?.get('status')?.value;
-    if (previousStatus === 'deleted') {
-      return null; // Skip validation if the previous row is deleted
+    const previousStatus = previousRow?.get('deleted')?.value
+    if (previousStatus === true) {
+      return null
     }
 
     const entry = currentRow.get('entry')?.value
