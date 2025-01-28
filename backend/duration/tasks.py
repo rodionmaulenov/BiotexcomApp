@@ -14,6 +14,8 @@ def get_latest_non_disabled_date_for_tracking():
         latest_entry_subquery = Date.objects.filter(
             surrogacy_id=OuterRef('surrogacy_id'),
             disable=True,
+        ).exclude(
+            country='NIP'
         ).order_by('-exit').values('exit')[:1]
 
         latest_dates = Date.objects.filter(

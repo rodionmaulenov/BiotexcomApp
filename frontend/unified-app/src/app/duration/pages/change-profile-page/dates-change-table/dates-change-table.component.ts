@@ -133,6 +133,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
     const newRow = this.EmptyFormServ.initEmptyDateForm(uniqueID, previousRow)
     // Add the new row to the FormArray
     this.formArray.push(newRow)
+    this.reapplyValidators()
     this.FormFieldsServ.trackDateChanges(newRow, this.destroy$, this.restrictUpdating)
     // Update pagination after adding a row
     const paginator = this.childPaginator()
