@@ -179,6 +179,9 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
 
   private reapplyValidators(): void {
     this.formArray.controls.forEach((control, index) => {
+      if (control.get('deleted')?.value === true) {
+        return
+      }
       const previousRow = index > 0 ? this.formArray.at(index - 1) : null
       control.setValidators([
         entryExitDateValidator(),
