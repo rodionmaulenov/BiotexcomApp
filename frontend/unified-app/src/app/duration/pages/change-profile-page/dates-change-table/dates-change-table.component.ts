@@ -173,6 +173,7 @@ export class DatesChangeTableComponent implements OnDestroy, OnChanges {
       this.lengthNotZero.set(this.formArray.controls
         .filter(control => control.get('deleted')?.value !== true).length == 0
       )
+      this.cdr.markForCheck()
     }, 100)
   }
 
