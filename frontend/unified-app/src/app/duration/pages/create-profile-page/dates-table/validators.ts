@@ -28,6 +28,9 @@ export function crossRowDateValidator(previousRow: AbstractControl | null): Vali
     const currentEntryDate = entry ? new Date(new Date(entry).setHours(0, 0, 0, 0)) : null
     const previousExitDate = previousExit ? new Date(new Date(previousExit).setHours(0, 0, 0, 0)) : null
 
+    console.log('currentEntryDate', currentEntryDate)
+    console.log('previousExitDate', previousExitDate)
+
     if (
       currentEntryDate &&
       previousExitDate &&
@@ -39,4 +42,3 @@ export function crossRowDateValidator(previousRow: AbstractControl | null): Vali
     return null
   }
 }
-
