@@ -32,7 +32,6 @@ import {DatePickerFieldDirective} from '../../../common-ui/directives/date-picke
 import {NgClass, NgIf} from '@angular/common';
 import {CUSTOM_DATE_FORMATS, CustomDateAdapter} from '../../../data/rus_datepicker/rus-datepicker';
 import {fadeOut} from './animations';
-import {crossRowDateValidator, entryExitDateValidator} from './validators';
 
 
 @Component({
@@ -82,19 +81,6 @@ export class DatesTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.formArray.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.dateFormStatus.set(this.formArray.invalid)
     })
-
-    this.formArray.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.formArray.controls.forEach((control, index) => {
-          const previousRow = index > 0 ? this.formArray.at(index - 1) : null
-          control.setValidators([
-            entryExitDateValidator(),
-            crossRowDateValidator(previousRow as FormGroup),
-          ])
-          control.updateValueAndValidity({emitEvent: false})
-        })
-      })
   }
 
 
@@ -105,8 +91,7 @@ export class DatesTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   protected addRow() {
-    const previousRow = this.formArray.length > 0 ? this.formArray.at(this.formArray.length - 1) : null
-    this.formArray.push(this.EmptyFormServ.createGroup(previousRow as FormGroup))
+    this.formArray.push(this.EmptyFormServ.createGroup())
     this.dateFormStatus.set(this.formArray.invalid)
     this.table().renderRows()
   }
