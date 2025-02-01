@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'storages',
     # My app
     'duration',
+    'fill_invitation'
 ]
 
 # CORS Header for development
