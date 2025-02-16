@@ -1,0 +1,91 @@
+@use '@angular/material' as mat;
+
+:host {
+   ::ng-deep .mat-mdc-outlined-button {
+      background-color: var(--background-button-color);
+      height: var(--button-height);
+      font-size: var(--font-button-link-size);
+      font-weight: var(--font-button-link-weigt);
+      line-height: var(--button-line-height-body);
+      border-width: var(--button-border-width);
+      letter-spacing: var(--font-button-letter-spacing);
+      padding: var(--button-padding);
+      font-style: normal;
+      font-variant-alternates: normal;
+      font-variant-caps: normal;
+      font-variant-east-asian: normal;
+      font-variant-emoji: normal;
+      font-variant-ligatures: normal;
+      font-variant-numeric: normal;
+      font-variant-position: normal;
+   } 
+
+   @include mat.chips-overrides((
+      outline-color: var(--link-color),
+      outline-width: var(--selected-item-border-width),
+      hover-state-layer-color: transparent,
+      focus-state-layer-color: transparent,
+      label-text-weight: var(--selected-item-font-weight),
+      label-text-size: var(--font-size-body),
+      label-text-line-height: var(--line-height-body),
+      label-text-font: var(--font-family-body),
+      label-text-color: var(--color-body)
+    ));
+
+   .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+      border-radius: 8px;
+      background-color: var(--background-selected-item-color);
+      padding: var(--selected-item-padding);
+      height: var(--selected-item-height);
+      font-weight: var(--selected-item-font-weight);
+      font-style: normal;
+      font-variant-alternates: normal;
+      font-variant-caps: normal;
+      font-variant-east-asian: normal;
+      font-variant-emoji: normal;
+      font-variant-ligatures: normal;
+      font-variant-numeric: normal;
+      font-variant-position: normal;
+  }
+
+   .mat-mdc-outlined-button:not(:disabled) {
+      color: var(--link-color);
+      border-color: var(--link-color);
+   }
+
+   .mat-mdc-outlined-button:not(:disabled):hover {
+      color: var(--hover_disable-color);
+      border-color: var(--hover_disable-color);
+   }
+
+   .mat-mdc-outlined-button[disabled],
+   .mat-mdc-outlined-button.mat-mdc-button-disabled {
+      color: var(--disabled-button-color);
+      border-color: var(--disabled-button-border-color);
+   }
+}
+
+.btn-separator {
+   display: flex;
+   gap: 8px;
+   margin-bottom: 10px;
+}
+
+.chips-area {
+   border: 1px dashed var(--selected-item-border-color);
+   padding: 0 10px 10px 10px;
+}
+
+.mat-mdc-chip-remove .mat-icon {
+   width: 28px;
+   height: 23px;
+   font-size: 22px;
+   color: var(--link-color);
+}
+
+.mat-mdc-chip-remove:hover .mat-icon {
+   width: 28px;
+   height: 23px;
+   font-size: 22px;
+   color: var(--hover_disable-color);
+}

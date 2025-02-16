@@ -1,0 +1,67 @@
+<table mat-table [dataSource]="passportData()" class="mat-elevation-z8">
+
+   <!-- Surname Column -->
+   <ng-container matColumnDef="surname">
+      <th mat-header-cell *matHeaderCellDef> Фамилия </th>
+      <td mat-cell *matCellDef="let element">
+         <mat-form-field class="override-form-field">
+            <input matInput [(ngModel)]="element.surname" (ngModelChange)="_store.updatePassportData(element)">
+         </mat-form-field>
+      </td>
+   </ng-container>
+
+   <!-- Name Column -->
+   <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Имя </th>
+      <td mat-cell *matCellDef="let element">
+         <mat-form-field>
+            <input matInput [(ngModel)]="element.name" (ngModelChange)="_store.updatePassportData(element)">
+         </mat-form-field>
+      </td>
+   </ng-container>
+
+   <!-- Father name Column -->
+   <ng-container matColumnDef="father_name">
+      <th mat-header-cell *matHeaderCellDef> Отчество </th>
+      <td mat-cell *matCellDef="let element">
+         <mat-form-field>
+            <input matInput [(ngModel)]="element.father_name" (ngModelChange)="_store.updatePassportData(element)">
+         </mat-form-field>
+      </td>
+   </ng-container>
+
+   <!-- Passport number Column -->
+   <ng-container matColumnDef="passport_number">
+      <th mat-header-cell *matHeaderCellDef> Номер паспотра </th>
+      <td mat-cell *matCellDef="let element">
+         <mat-form-field>
+            <input matInput [(ngModel)]="element.passport_number" (ngModelChange)="_store.updatePassportData(element)">
+         </mat-form-field>
+      </td>
+   </ng-container>
+
+   <!-- Date of birth Column -->
+   <ng-container matColumnDef="date_of_birth">
+      <th mat-header-cell *matHeaderCellDef> Дата рождения </th>
+      <td mat-cell *matCellDef="let element">
+         <mat-form-field>
+            <input matInput [(ngModel)]="element.date_of_birth" (ngModelChange)="_store.updatePassportData(element)">
+         </mat-form-field>
+      </td>
+   </ng-container>
+
+   <!-- Date of issue Column -->
+   <ng-container matColumnDef="date_of_issue">
+      <th mat-header-cell *matHeaderCellDef> Дата выпуска </th>
+      <td mat-cell *matCellDef="let element">
+         <mat-form-field>
+            <input matInput [(ngModel)]="element.date_of_issue" (ngModelChange)="_store.updatePassportData(element)">
+         </mat-form-field>
+      </td>
+   </ng-container>
+
+
+   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>

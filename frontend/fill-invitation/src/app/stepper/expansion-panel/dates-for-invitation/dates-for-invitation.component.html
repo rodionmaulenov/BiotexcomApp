@@ -1,0 +1,23 @@
+<div class="forms-diraction">
+   <mat-form-field appearance="outline" hideRequiredMarker="false">
+      <mat-label>Номер приглашения</mat-label>
+      <input matInput [formControl]="number" required>
+   </mat-form-field>
+
+   <mat-form-field appearance="outline" hideRequiredMarker="false">
+      <mat-label>Дата приглашения</mat-label>
+      <input matInput [matDatepicker]="picker" [formControl]="numberDate" required>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+   </mat-form-field>
+
+   <mat-form-field appearance="outline" hideRequiredMarker="false">
+      <mat-label>Диапазон прибывания</mat-label>
+      <mat-date-range-input [rangePicker]="rangePicker" required>
+         <input matStartDate placeholder="Начало" [formControl]="startDate" required="">
+         <input matEndDate placeholder="Окончание" [formControl]="endDate" required="">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+   </mat-form-field>
+</div>

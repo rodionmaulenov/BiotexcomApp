@@ -1,0 +1,7 @@
+:host {
+   ::ng-deep .mat-step-icon-state-edit {
+      background-color: var(--light-color) !important;
+   }
+}
+
+.step-icon.done { font-size: 32px; width: 32px; height: 32px; color: green; }

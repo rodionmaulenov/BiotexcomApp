@@ -1,0 +1,36 @@
+@if(_imgUplStore.inProgress()) {
+  <mat-stepper linear (selectionChange)="onStepChange($event)">
+  @for(step of _stepStore.steps(); track step.label; let indx = $index) {
+    <mat-step [label]="step.label">
+    @if(_imgUplStore.loading()){
+      <mat-progress-bar mode="query" />
+    } @else {
+      @if(_stepStore.selectedIndex() < 2) {
+      <expansion-pannel />
+      } @else{
+      <expansion-pannel />
+      }
+      <div>
+        @if(step.label === 'Изъятие паспортных данных') {
+          <button mat-button matStepperNext (click)="_imgUplStore.translatePassports()">Далее</button>
+        }
+        @if(step.label === 'Перевод на украинский язык') {
+          <button mat-button matStepperPrevious>Назад</button>
+          <button mat-button matStepperNext>Далее</button>
+        }
+        @if(step.label === 'Генерация документа') {
+          <button mat-button matStepperPrevious>Назад</button>
+          <button mat-button matStepperNext (click)="_imgUplStore.generateDocx()">Сгенерировать документ</button>
+        }
+      </div>
+    }
+    </mat-step>
+}
+
+  <!-- ✅ Custom Icons Based on Step State -->
+  <ng-template matStepperIcon="edit">
+    <mat-icon class="step-icon done">check_circle</mat-icon>
+  </ng-template>
+  
+</mat-stepper>
+}

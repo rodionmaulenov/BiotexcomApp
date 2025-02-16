@@ -13,6 +13,8 @@ python-dotenv==1.0.1
 django-storages==1.14.4
 boto3==1.35.22
 openai==1.60.2
+drf-standardized-errors==0.14.1
+python-docx==1.1.2
 
 
 

@@ -44,10 +44,10 @@ frontend/**/yarn-error.log
 frontend/**/.history/
 
 # Ignore VSCode settings files
-frontend/**/.vscode/settings.json
-frontend/**/.vscode/tasks.json
-frontend/**/.vscode/launch.json
-frontend/**/.vscode/extensions.json
+frontend/fill-invitation/.vscode/settings.json
+frontend/fill-invitation/.vscode/tasks.json
+frontend/fill-invitation/.vscode/launch.json
+frontend/fill-invitation/.vscode/extensions.json
 
 # Ignore miscellaneous files
 frontend/**/connect.lock

@@ -1,0 +1,45 @@
+<input
+  type="file"
+  id="uploadBTN"
+  (change)="store.onFileSelected($event)"
+  accept="image/png, image/jpeg, image/jpg"
+  multiple
+  hidden
+/>
+<div class="btn-separator">
+  <button
+    mat-stroked-button
+    (click)="triggerFileInput()"
+    [disabled]="store.inProgress()"
+  >
+    Выбрать файл
+  </button>
+
+  <button
+    mat-stroked-button
+    (click)="store.onUpload()"
+    [disabled]="store.inProgress() || !store.selectedFiles().length"
+  >
+    Загрузить файл
+  </button>
+</div>
+
+<div class="chips-area">
+  <mat-chip-set>
+    @for (file of store.selectedFiles(); track file.file.name) {
+      <mat-chip cdkDrag (removed)="store.removeFile(file.file)">
+        <img matChipAvatar
+          [src]="store.defaultIMG()"
+          alt="Passport image"
+        />
+        {{ file.file.name.length > 15 ? file.file.name.slice(0, 12) + '...' + file.file.name.slice(-4) : file.file.name }}
+         - Прогресс: {{ file.progress }}%
+        @if (file.progress !== 100) {
+          <button matChipRemove>
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-chip>
+    }
+  </mat-chip-set>
+</div>

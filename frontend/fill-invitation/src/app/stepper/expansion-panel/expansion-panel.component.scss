@@ -1,0 +1,28 @@
+:host {
+
+   ::ng-deep .header-align .mat-expansion-panel {
+      width: 800px;
+   }
+   
+   ::ng-deep .for-table .mat-expansion-panel {
+      width: 1400px;
+   }
+   
+   ::ng-deep .mat-expansion-panel-body {
+      padding: 16px 24px 16px;
+   }
+
+}
+
+.for-table {
+   display: flex;
+   text-align: center;
+   gap: 20px;
+}
+
+.for-form-field {
+   display: flex;
+   text-align: center;
+   gap: 10px;
+}
+

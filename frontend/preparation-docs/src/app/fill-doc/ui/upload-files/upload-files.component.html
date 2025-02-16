@@ -3,20 +3,20 @@
 <!--<button mat-raised-button (click)="onUpload()" [disabled]="serverServ.isLoaded()">Загрузить файл</button>-->
 
 
-<!--<mat-chip-set>-->
-<!--  @for (file of selectedFiles(); track file.file.name) {-->
-<!--    <mat-chip cdkDrag (removed)="removeFile(file.file)">-->
-<!--      <img matChipAvatar-->
-<!--        [src]="defaultImage()"-->
-<!--        alt="Passport image"-->
-<!--      />-->
-<!--      {{ file.file.name }} - Прогресс: {{ file.progress }}%-->
-<!--      @if (file.progress !== 100) {-->
-<!--        <button matChipRemove>-->
-<!--          <mat-icon>cancel</mat-icon>-->
-<!--        </button>-->
-<!--      }-->
-<!--    </mat-chip>-->
-<!--  }-->
-<!--</mat-chip-set>-->
+<mat-chip-set>
+  @for (file of selectedFiles(); track file.file.name) {
+    <mat-chip cdkDrag (removed)="removeFile(file.file)">
+      <img matChipAvatar
+        [src]="defaultImage()"
+        alt="Passport image"
+      />
+      {{ file.file.name }} - Прогресс: {{ file.progress }}%
+      @if (file.progress !== 100) {
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      }
+    </mat-chip>
+  }
+</mat-chip-set>
 

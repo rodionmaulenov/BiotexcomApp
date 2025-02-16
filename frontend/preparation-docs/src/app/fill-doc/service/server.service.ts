@@ -1,6 +1,6 @@
 import {HttpClient, HttpEventType} from '@angular/common/http';
 import {inject, Injectable, signal, WritableSignal} from '@angular/core';
-import {environment} from '../../../environments/environment';
+import {environment} from '../../../../../fill-invitation/src/environments/environment';
 import {untilDestroyed} from '@ngneat/until-destroy';
 
 

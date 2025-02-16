@@ -1,0 +1,33 @@
+@if(_stepStore.selectedIndex() < 2) { <mat-accordion class="for-table" multi>
+   <mat-expansion-panel expanded="true" hideToggle>
+
+      <mat-expansion-panel-header>
+
+         <mat-panel-title class="for-table">
+            <mat-icon>perm_media</mat-icon>
+            Cчитанные данные с паспорта
+         </mat-panel-title>
+
+      </mat-expansion-panel-header>
+
+      <extr-passp-tbl />
+
+   </mat-expansion-panel>
+   </mat-accordion>
+   }
+   @if(_stepStore.selectedIndex() == 2) {
+
+   <mat-accordion class="header-align" multi hideToggle>
+      <mat-expansion-panel expanded="true">
+
+         <mat-expansion-panel-header>
+            <mat-panel-title class="for-form-field">  
+               <mat-icon>border_color</mat-icon>
+               Заполните пустые поля
+             </mat-panel-title>
+         </mat-expansion-panel-header>
+
+         <dates-for-invitation />
+      </mat-expansion-panel>
+   </mat-accordion>
+   }
